@@ -2,95 +2,69 @@
 
 
 
-> Privacy-first, local AI workbench for confidential academic and institutional workflows.
+Promotex AI is a local AI workspace that we are building for working with sensitive institutional information.
 
 
 
-Promotex AI is a self-hosted AI workbench designed to provide a ChatGPT-like experience while keeping sensitive institutional data inside the organization's infrastructure.
+The main idea is simple: instead of sending confidential documents to external AI services, the AI processing can happen inside the organization's own environment.
 
 
 
-It combines general AI assistance with confidential document analysis, local knowledge retrieval, accreditation support, and document generation.
+Our current prototype focuses on academic and accreditation workflows.
 
 
 
-\## 🚀 Key Features
+\## What we have built
 
 
 
-\- 💬 General AI chat
+\- General AI chat
 
-\- 🔒 Private document workspace
+\- Local PDF and DOCX document analysis
 
-\- 📄 PDF and DOCX analysis
+\- Private document workspace
 
-\- 📚 Local Knowledge Base / RAG
+\- Local knowledge base with document search
 
-\- 🎓 Accreditation analysis
+\- Accreditation document analysis
 
-\- 📊 PowerPoint generation
+\- PowerPoint generation
 
-\- 🧠 Local AI model orchestration
+\- Local AI inference using Ollama
 
-\- 📴 Designed for offline / air-gapped environments
+\- Session-based document isolation
 
-\- 🛡️ Session-based document isolation
+\- Privacy and system monitoring dashboard
 
-\- 🔍 Privacy monitoring and admin dashboard
-
-\- 🖼️ Local multimodal capabilities planned for future expansion
+\- Offline/local workflow support
 
 
 
-\## 🏗️ Architecture
+\## How it works
 
 
 
 ```text
 
-&#x20;                   ┌─────────────────────┐
+User
 
-&#x20;                   │     Promotex UI     │
+&#x20; ↓
 
-&#x20;                   │  ChatGPT-like UX    │
+Promotex AI Interface
 
-&#x20;                   └──────────┬──────────┘
+&#x20; ↓
 
-&#x20;                              │
+FastAPI Backend
 
-&#x20;                              ▼
+&#x20; ↓
 
-&#x20;                   ┌─────────────────────┐
+Local AI + Document Tools
 
-&#x20;                   │   FastAPI Backend   │
+&#x20; ↓
 
-&#x20;                   └──────────┬──────────┘
+Local Knowledge Base
 
-&#x20;                              │
+&#x20; ↓
 
-&#x20;             ┌────────────────┼────────────────┐
-
-&#x20;             ▼                ▼                ▼
-
-&#x20;      ┌────────────┐   ┌────────────┐   ┌────────────┐
-
-&#x20;      │ Local AI   │   │ Local RAG  │   │ Documents  │
-
-&#x20;      │ Models     │   │ Knowledge  │   │ \& Tools    │
-
-&#x20;      └────────────┘   └────────────┘   └────────────┘
-
-&#x20;             │                │                │
-
-&#x20;             └────────────────┼────────────────┘
-
-&#x20;                              ▼
-
-&#x20;                   ┌─────────────────────┐
-
-&#x20;                   │ Organization's      │
-
-&#x20;                   │ Local Infrastructure│
-
-&#x20;                   └─────────────────────┘
+Analysis / Reports
 
