@@ -48,23 +48,23 @@ Our current prototype focuses on academic and accreditation workflows.
 
 User
 
-&#x20; ↓
+ ↓
 
 Promotex AI Interface
 
-&#x20; ↓
+ ↓
 
 FastAPI Backend
 
-&#x20; ↓
+ ↓
 
 Local AI + Document Tools
 
-&#x20; ↓
+ ↓
 
 Local Knowledge Base
 
-&#x20; ↓
+ ↓
 
 Analysis / Reports
 
