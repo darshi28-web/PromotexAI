@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+*.pyc
+.env
+.env.*
+*.log
+*.tmp
+.git/
+*.pptx
+*.pdf
+*_backup.py
+*_backup.html

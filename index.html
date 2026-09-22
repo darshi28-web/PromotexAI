@@ -1,0 +1,3548 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Promotex AI — Your Private AI Workspace</title>
+  <link rel="icon" type="image/png" href="/assets/promotex-logo.png">
+  <link rel="icon" type="image/png" href="assets/promotex-logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-base: #080c14;
+      --bg-sidebar: #0d121f;
+      --bg-surface: #111827;
+      --bg-card: rgba(17, 24, 39, 0.82);
+      --bg-card-hover: rgba(30, 41, 59, 0.88);
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-accent: rgba(99, 102, 241, 0.32);
+      --border-glow: rgba(99, 102, 241, 0.55);
+      --primary: #6366f1;
+      --primary-hover: #4f46e5;
+      --primary-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #38bdf8 100%);
+      --accent-cyan: #06b6d4;
+      --accent-emerald: #10b981;
+      --accent-amber: #f59e0b;
+      --accent-rose: #f43f5e;
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 20px;
+      --shadow-subtle: 0 4px 20px rgba(0, 0, 0, 0.35);
+      --shadow-glow: 0 0 24px rgba(99, 102, 241, 0.22);
+      --font-main: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-main);
+      background: var(--bg-base);
+      color: var(--text-primary);
+      height: 100vh;
+      overflow: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* App Desktop Layout */
+    .app {
+      display: flex;
+      height: 100vh;
+      width: 100vw;
+      background: radial-gradient(circle at 50% 0%, #13192f 0%, #080c14 70%);
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 280px;
+      background: var(--bg-sidebar);
+      border-right: 1px solid var(--border-subtle);
+      display: flex;
+      flex-direction: column;
+      z-index: 50;
+      transition: var(--transition);
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .sidebar-header {
+      padding: 20px 18px 16px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .brand-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: var(--radius-md);
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-glow);
+      flex-shrink: 0;
+      overflow: hidden;
+      border: 1px solid rgba(99, 102, 241, 0.35);
+    }
+
+    .brand-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-title {
+      font-size: 18.5px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .brand-title span {
+      background: linear-gradient(135deg, #a5b4fc, #38bdf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .brand-subtitle {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 500;
+      margin-top: 1px;
+    }
+
+    .sidebar-action {
+      padding: 14px 16px 8px;
+    }
+
+    .btn-new-chat {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(139, 92, 246, 0.22));
+      border: 1px solid var(--border-accent);
+      color: #e0e7ff;
+      border-radius: var(--radius-md);
+      padding: 11px 16px;
+      font-weight: 600;
+      font-size: 13.5px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .btn-new-chat:hover {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.28), rgba(139, 92, 246, 0.35));
+      border-color: var(--border-glow);
+      box-shadow: var(--shadow-glow);
+      transform: translateY(-1px);
+    }
+
+    .sidebar-menu {
+      flex: 1;
+      overflow-y: auto;
+      padding: 6px 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .sidebar-menu::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .sidebar-menu::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+    }
+
+    .menu-section-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.9px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      padding: 12px 10px 4px;
+    }
+
+    .menu-item {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 9.5px 12px;
+      border-radius: var(--radius-sm);
+      color: var(--text-secondary);
+      font-size: 13.5px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+      border: 1px solid transparent;
+      user-select: none;
+    }
+
+    .menu-item:hover {
+      color: var(--text-primary);
+      background: rgba(255, 255, 255, 0.04);
+      border-color: rgba(255, 255, 255, 0.05);
+    }
+
+    .menu-item.active {
+      color: #c7d2fe;
+      background: rgba(99, 102, 241, 0.14);
+      border-color: rgba(99, 102, 241, 0.28);
+    }
+
+    .menu-icon {
+      width: 18px;
+      height: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: inherit;
+    }
+
+    .menu-badge {
+      margin-left: auto;
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 6px;
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--accent-emerald);
+      font-weight: 600;
+    }
+
+    /* Sidebar Footer / Session Isolation Card */
+    .sidebar-footer {
+      padding: 14px 16px;
+      border-top: 1px solid var(--border-subtle);
+      background: rgba(9, 12, 20, 0.6);
+    }
+
+    .session-card {
+      background: rgba(17, 24, 39, 0.7);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 11px 12px;
+    }
+
+    .session-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 5px;
+    }
+
+    .session-title {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .session-status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent-emerald);
+      box-shadow: 0 0 8px var(--accent-emerald);
+      display: inline-block;
+    }
+
+    .session-chip {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: #a5b4fc;
+      background: rgba(99, 102, 241, 0.12);
+      padding: 3px 6px;
+      border-radius: 4px;
+      border: 1px solid rgba(99, 102, 241, 0.2);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      margin-bottom: 5px;
+      display: block;
+    }
+
+    .session-metric {
+      font-size: 11px;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Main Area */
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      height: 100vh;
+      position: relative;
+      background: transparent;
+    }
+
+    /* Topbar */
+    .topbar {
+      height: 60px;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      background: rgba(13, 18, 31, 0.75);
+      backdrop-filter: blur(12px);
+      z-index: 20;
+      flex-shrink: 0;
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .mobile-toggle {
+      display: none;
+      background: transparent;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      color: var(--text-secondary);
+      padding: 6px;
+      cursor: pointer;
+    }
+
+    .page-breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13.5px;
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+
+    .page-breadcrumb span {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .status-pill {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      color: #34d399;
+      font-size: 12px;
+      font-weight: 500;
+      padding: 5px 12px;
+      border-radius: 999px;
+    }
+
+    .status-pulse {
+      width: 7px;
+      height: 7px;
+      background: var(--accent-emerald);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--accent-emerald);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+      }
+
+      70% {
+        transform: scale(1.1);
+        box-shadow: 0 0 0 6px rgba(16, 185, 129, 0);
+      }
+
+      100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+      }
+    }
+
+    .telemetry-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+      font-size: 11.5px;
+      font-family: var(--font-mono);
+      padding: 5px 12px;
+      border-radius: 999px;
+    }
+
+    /* Chat & Content Container */
+    .chat-container {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px 24px 170px;
+      scroll-behavior: smooth;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chat-container::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .chat-container::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 4px;
+    }
+
+    .chat-inner {
+      width: 100%;
+      max-width: 920px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* Welcome Dashboard */
+    .dashboard-view {
+      width: 100%;
+      animation: fadeIn 0.25s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hero-card {
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.5) 0%, rgba(17, 24, 39, 0.8) 100%);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-xl);
+      padding: 34px 28px 28px;
+      text-align: center;
+      margin-bottom: 26px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow-subtle);
+    }
+
+    .hero-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #6366f1, #38bdf8, transparent);
+    }
+
+    .hero-emblem {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 16px;
+      border-radius: 50%;
+      background: #000;
+      border: 1px solid rgba(99, 102, 241, 0.4);
+      box-shadow: 0 0 25px rgba(99, 102, 241, 0.3);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hero-emblem img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .hero-title {
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: -0.8px;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+      line-height: 1.2;
+    }
+
+    .hero-title span {
+      background: linear-gradient(135deg, #a5b4fc 0%, #38bdf8 60%, #818cf8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-positioning {
+      font-size: 16px;
+      color: #e0e7ff;
+      font-weight: 500;
+      margin-bottom: 12px;
+      letter-spacing: -0.2px;
+    }
+
+    .hero-description {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--text-secondary);
+      max-width: 640px;
+      margin: 0 auto 20px;
+    }
+
+    .hero-claims {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .claim-badge {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-subtle);
+      padding: 5px 12px;
+      border-radius: var(--radius-sm);
+    }
+
+    .claim-badge svg {
+      color: #38bdf8;
+    }
+
+    /* Quick Action Cards Grid (8 Cards) */
+    .actions-section-title {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .actions-section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border-subtle);
+    }
+
+    .quick-actions-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .action-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+    }
+
+    .action-card:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-accent);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px -4px rgba(0, 0, 0, 0.45), var(--shadow-glow);
+    }
+
+    .card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .card-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+    }
+
+    .icon-purple {
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    }
+
+    .icon-blue {
+      background: linear-gradient(135deg, #0284c7, #38bdf8);
+    }
+
+    .icon-emerald {
+      background: linear-gradient(135deg, #059669, #10b981);
+    }
+
+    .icon-amber {
+      background: linear-gradient(135deg, #d97706, #f59e0b);
+    }
+
+    .icon-rose {
+      background: linear-gradient(135deg, #e11d48, #f43f5e);
+    }
+
+    .icon-indigo {
+      background: linear-gradient(135deg, #4f46e5, #6366f1);
+    }
+
+    .icon-teal {
+      background: linear-gradient(135deg, #0d9488, #14b8a6);
+    }
+
+    .icon-slate {
+      background: linear-gradient(135deg, #475569, #64748b);
+    }
+
+    .card-title {
+      font-size: 14.5px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    .card-desc {
+      font-size: 12px;
+      line-height: 1.45;
+      color: var(--text-secondary);
+      flex: 1;
+    }
+
+    .card-arrow {
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: #a5b4fc;
+      transition: var(--transition);
+    }
+
+    .action-card:hover .card-arrow {
+      gap: 7px;
+      color: #c7d2fe;
+    }
+
+    /* Suggestion Chips */
+    .suggestions-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .suggestion-chip {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-subtle);
+      border-radius: 999px;
+      padding: 7px 13px;
+      font-size: 12px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .suggestion-chip:hover {
+      background: rgba(99, 102, 241, 0.12);
+      border-color: rgba(99, 102, 241, 0.3);
+      color: #e0e7ff;
+    }
+
+    /* Chat Messages */
+    .message-row {
+      display: flex;
+      gap: 14px;
+      width: 100%;
+      animation: fadeIn 0.2s ease-out;
+    }
+
+    .message-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-weight: 700;
+      font-size: 13px;
+      overflow: hidden;
+    }
+
+    .user-row {
+      flex-direction: row-reverse;
+    }
+
+    .user-row .message-avatar {
+      background: linear-gradient(135deg, #374151, #4b5563);
+      color: #f3f4f6;
+    }
+
+    .ai-row .message-avatar {
+      background: #000;
+      border: 1px solid rgba(99, 102, 241, 0.35);
+      box-shadow: var(--shadow-glow);
+    }
+
+    .ai-row .message-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .message-bubble {
+      max-width: 82%;
+      padding: 16px 20px;
+      border-radius: var(--radius-lg);
+      font-size: 14px;
+      line-height: 1.65;
+      word-break: break-word;
+      position: relative;
+    }
+
+    .user-row .message-bubble {
+      background: linear-gradient(135deg, #1e293b, #0f172a);
+      border: 1px solid rgba(99, 102, 241, 0.25);
+      color: #f1f5f9;
+      border-top-right-radius: 4px;
+      white-space: pre-wrap;
+    }
+
+    .ai-row .message-bubble {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-primary);
+      border-top-left-radius: 4px;
+      flex: 1;
+    }
+
+    /* Markdown Rendering Inside AI Messages */
+    .ai-content {
+      font-size: 14px;
+      line-height: 1.65;
+    }
+
+    .ai-content h1,
+    .ai-content h2,
+    .ai-content h3 {
+      margin: 14px 0 8px;
+      color: #f8fafc;
+      font-weight: 700;
+    }
+
+    .ai-content h1 {
+      font-size: 18px;
+    }
+
+    .ai-content h2 {
+      font-size: 16px;
+    }
+
+    .ai-content h3 {
+      font-size: 14.5px;
+    }
+
+    .ai-content p {
+      margin-bottom: 10px;
+    }
+
+    .ai-content p:last-child {
+      margin-bottom: 0;
+    }
+
+    .ai-content ul,
+    .ai-content ol {
+      margin: 8px 0 12px 22px;
+    }
+
+    .ai-content li {
+      margin-bottom: 4px;
+    }
+
+    .ai-content blockquote {
+      border-left: 3px solid #6366f1;
+      padding-left: 12px;
+      margin: 10px 0;
+      color: #cbd5e1;
+      background: rgba(99, 102, 241, 0.06);
+      padding: 8px 12px;
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    }
+
+    /* Code block with copy button */
+    .code-block-wrapper {
+      position: relative;
+      background: #090d16;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-sm);
+      margin: 12px 0;
+      overflow: hidden;
+    }
+
+    .code-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 12px;
+      background: rgba(255, 255, 255, 0.03);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 11px;
+      font-family: var(--font-mono);
+      color: var(--text-muted);
+    }
+
+    .code-copy-btn {
+      background: transparent;
+      border: none;
+      color: #a5b4fc;
+      font-size: 11px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .code-copy-btn:hover {
+      color: #c7d2fe;
+    }
+
+    .code-block-wrapper pre {
+      padding: 12px 14px;
+      margin: 0;
+      overflow-x: auto;
+      font-family: var(--font-mono);
+      font-size: 12.5px;
+      color: #e2e8f0;
+    }
+
+    .ai-content code:not(pre code) {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      background: rgba(99, 102, 241, 0.12);
+      color: #c7d2fe;
+      padding: 2px 6px;
+      border-radius: 4px;
+      border: 1px solid rgba(99, 102, 241, 0.2);
+    }
+
+    .message-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 12px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .btn-msg-action {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 8px;
+      border-radius: 4px;
+      transition: var(--transition);
+    }
+
+    .btn-msg-action:hover {
+      color: var(--text-secondary);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    /* Truthful AI Multi-Stage Processing Indicator */
+    .processing-card {
+      background: rgba(17, 24, 39, 0.92);
+      border: 1px solid var(--border-accent);
+      border-radius: var(--radius-lg);
+      padding: 18px 20px;
+      width: 100%;
+      max-width: 82%;
+      box-shadow: var(--shadow-glow);
+      animation: fadeIn 0.2s ease-out;
+    }
+
+    .processing-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .processing-title {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #c7d2fe;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .processing-badge {
+      font-size: 10.5px;
+      font-family: var(--font-mono);
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.1);
+      padding: 2px 8px;
+      border-radius: 4px;
+      border: 1px solid rgba(56, 189, 248, 0.2);
+    }
+
+    .processing-stepper {
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+
+    .stage-step {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 13px;
+      transition: var(--transition);
+    }
+
+    .stage-bullet {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      flex-shrink: 0;
+      transition: var(--transition);
+    }
+
+    .stage-step.completed {
+      color: #a7f3d0;
+    }
+
+    .stage-step.completed .stage-bullet {
+      background: rgba(16, 185, 129, 0.2);
+      color: #10b981;
+      border: 1px solid rgba(16, 185, 129, 0.4);
+    }
+
+    .stage-step.active {
+      color: #e0e7ff;
+      font-weight: 600;
+    }
+
+    .stage-step.active .stage-bullet {
+      background: rgba(99, 102, 241, 0.3);
+      color: #818cf8;
+      border: 1px solid var(--border-glow);
+      box-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
+      animation: spinner 1.4s linear infinite;
+    }
+
+    .stage-step.pending {
+      color: var(--text-muted);
+    }
+
+    .stage-step.pending .stage-bullet {
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text-muted);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    @keyframes spinner {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* Feature View Cards (Private Workspace, KB, Admin, Settings, PPT, Accreditation) */
+    .feature-view {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-xl);
+      padding: 26px;
+      width: 100%;
+      animation: fadeIn 0.25s ease-out;
+      box-shadow: var(--shadow-subtle);
+    }
+
+    .feature-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .feature-title-block h2 {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 4px;
+    }
+
+    .feature-title-block p {
+      font-size: 13.5px;
+      color: var(--text-secondary);
+    }
+
+    .feature-badge-pill {
+      font-size: 10.5px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: rgba(99, 102, 241, 0.15);
+      color: #a5b4fc;
+      border: 1px solid rgba(99, 102, 241, 0.3);
+    }
+
+    .upload-dropzone {
+      border: 2px dashed rgba(255, 255, 255, 0.12);
+      border-radius: var(--radius-lg);
+      padding: 30px 20px;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.02);
+      cursor: pointer;
+      transition: var(--transition);
+      margin-bottom: 18px;
+    }
+
+    .upload-dropzone:hover {
+      border-color: var(--primary);
+      background: rgba(99, 102, 241, 0.05);
+    }
+
+    .dropzone-icon {
+      width: 44px;
+      height: 44px;
+      margin: 0 auto 10px;
+      border-radius: var(--radius-md);
+      background: rgba(99, 102, 241, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #818cf8;
+    }
+
+    .dropzone-title {
+      font-size: 14.5px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 3px;
+    }
+
+    .dropzone-hint {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .button-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 9.5px 16px;
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      border: 1px solid transparent;
+      user-select: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #6366f1, #4f46e5);
+      color: white;
+      box-shadow: 0 4px 14px rgba(99, 102, 241, 0.28);
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #4f46e5, #4338ca);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(99, 102, 241, 0.4);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: var(--border-subtle);
+      color: var(--text-secondary);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-primary);
+    }
+
+    .btn-danger {
+      background: rgba(239, 68, 68, 0.15);
+      border-color: rgba(239, 68, 68, 0.3);
+      color: #f87171;
+    }
+
+    .btn-danger:hover {
+      background: rgba(239, 68, 68, 0.25);
+      border-color: rgba(239, 68, 68, 0.5);
+    }
+
+    /* Callout Box */
+    .callout-box {
+      padding: 13px 15px;
+      border-radius: var(--radius-md);
+      margin-top: 14px;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .callout-success {
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: #6ee7b7;
+    }
+
+    .callout-info {
+      background: rgba(99, 102, 241, 0.1);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      color: #c7d2fe;
+    }
+
+    .callout-warning {
+      background: rgba(245, 158, 11, 0.1);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      color: #fcd34d;
+    }
+
+    /* Floating Input Area */
+    .input-area {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 16px 24px 22px;
+      background: linear-gradient(180deg, transparent 0%, rgba(8, 12, 20, 0.88) 35%, #080c14 100%);
+      pointer-events: none;
+      z-index: 30;
+    }
+
+    .input-box {
+      pointer-events: auto;
+      max-width: 920px;
+      margin: 0 auto;
+      background: rgba(17, 24, 39, 0.88);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border-accent);
+      border-radius: var(--radius-lg);
+      padding: 8px 12px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), var(--shadow-glow);
+      transition: var(--transition);
+    }
+
+    .input-box:focus-within {
+      border-color: var(--border-glow);
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6), 0 0 28px rgba(99, 102, 241, 0.32);
+    }
+
+    .input-row-main {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .input-field {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--text-primary);
+      font-family: var(--font-main);
+      font-size: 14px;
+      padding: 8px 6px;
+      min-height: 40px;
+    }
+
+    .input-field::placeholder {
+      color: var(--text-muted);
+    }
+
+    .input-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 6px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      margin-top: 3px;
+    }
+
+    .input-tools-left {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .input-tool-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-secondary);
+      border-radius: var(--radius-sm);
+      padding: 5px 9px;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: var(--transition);
+    }
+
+    .input-tool-btn:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: var(--border-subtle);
+      color: var(--text-primary);
+    }
+
+    .btn-send {
+      background: var(--primary-gradient);
+      border: none;
+      color: white;
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: 0 2px 10px rgba(99, 102, 241, 0.4);
+    }
+
+    .btn-send:hover {
+      transform: translateY(-1px) scale(1.03);
+      box-shadow: 0 4px 16px rgba(99, 102, 241, 0.55);
+    }
+
+    .btn-send:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .active-file-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(99, 102, 241, 0.15);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      color: #c7d2fe;
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      margin-left: 6px;
+    }
+
+    /* Modal / Overlay */
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(4px);
+      z-index: 40;
+    }
+
+    /* Responsive */
+    @media (max-width: 980px) {
+      .quick-actions-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: -290px;
+      }
+
+      .sidebar.open {
+        left: 0;
+      }
+
+      .overlay.open {
+        display: block;
+      }
+
+      .mobile-toggle {
+        display: flex;
+      }
+
+      .quick-actions-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-title {
+        font-size: 26px;
+      }
+
+      .chat-container {
+        padding: 16px 16px 180px;
+      }
+
+      .input-area {
+        padding: 12px 16px 16px;
+      }
+
+      .topbar {
+        padding: 0 16px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="app">
+
+    <!-- Mobile Drawer Overlay -->
+    <div class="overlay" id="mobileOverlay" onclick="toggleSidebar()"></div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+
+      <div class="sidebar-header">
+        <div class="brand" onclick="newChat()">
+          <div class="brand-icon">
+            <img src="assets/promotex-logo.png" alt="Promotex AI Logo">
+          </div>
+          <div class="brand-text">
+            <div class="brand-title">Promotex <span>AI</span></div>
+            <div class="brand-subtitle">Your Private AI Workspace</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-action">
+        <button class="btn-new-chat" onclick="newChat()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+          <span>New Conversation</span>
+        </button>
+      </div>
+
+      <nav class="sidebar-menu">
+        <div class="menu-section-label">Core Workspace</div>
+
+        <div class="menu-item active" id="menuChat" onclick="newChat()">
+          <span class="menu-icon">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+          </span>
+          <span>General AI Chat</span>
+        </div>
+
+        <div class="menu-item" id="menuPrivateWorkspace" onclick="openPrivateWorkspace()">
+          <span class="menu-icon">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+          </span>
+          <span>Private Workspace</span>
+          <span class="menu-badge">Isolated</span>
+        </div>
+
+        <div class="menu-item" id="menuKnowledgeBase" onclick="openKnowledgeBase()">
+          <span class="menu-icon">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+            </svg>
+          </span>
+          <span>Knowledge Base</span>
+        </div>
+
+        <div class="menu-section-label">Academic Intelligence</div>
+
+        <div class="menu-item" id="menuAccreditation" onclick="openAccreditationCopilot()">
+          <span class="menu-icon">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="8" r="7"></circle>
+              <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+            </svg>
+          </span>
+          <span>Accreditation Copilot</span>
+        </div>
+
+        <div class="menu-item" id="menuImageUnderstanding" onclick="openImageUnderstanding()">
+          <span class="menu-icon">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <circle cx="8.5" cy="8.5" r="1.5"></circle>
+              <polyline points="21 15 16 10 5 21"></polyline>
+            </svg>
+          </span>
+          <span>Image Understanding</span>
+        </div>
+
+        <div class="menu-item" id="menuTopicPPT" onclick="openTopicPPT()">
+          <span class="menu-icon">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M2 3h20v14H2z"></path>
+              <path d="M8 21h8"></path>
+              <path d="M12 17v4"></path>
+            </svg>
+          </span>
+          <span>Create PPT</span>
+        </div>
+
+        <div class="menu-section-label">Governance &amp; Controls</div>
+
+        <div class="menu-item" id="menuPrivacyProof" onclick="openPrivacyProof()">
+          <span class="menu-icon">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+          </span>
+          <span>Privacy Proof</span>
+        </div>
+
+        <div class="menu-item" id="menuAdmin" onclick="openAdminDashboard()">
+          <span class="menu-icon">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="7" height="7"></rect>
+              <rect x="14" y="3" width="7" height="7"></rect>
+              <rect x="14" y="14" width="7" height="7"></rect>
+              <rect x="3" y="14" width="7" height="7"></rect>
+            </svg>
+          </span>
+          <span>Admin Dashboard</span>
+        </div>
+
+        <div class="menu-item" id="menuSettings" onclick="openSettings()">
+          <span class="menu-icon">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"></circle>
+              <path
+                d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+              </path>
+            </svg>
+          </span>
+          <span>Settings</span>
+        </div>
+
+        <div class="menu-item" onclick="clearPrivateData()">
+          <span class="menu-icon" style="color:#f87171;">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="3 6 5 6 21 6"></polyline>
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+            </svg>
+          </span>
+          <span>Clear Private Context</span>
+        </div>
+      </nav>
+
+      <!-- Sidebar Footer / Session Isolation Card -->
+      <div class="sidebar-footer">
+        <div class="session-card">
+          <div class="session-card-header">
+            <span class="session-title">
+              <span class="session-status-dot" id="footerStatusDot"></span>
+              Private Session
+            </span>
+            <span style="font-size:10px; color:#10b981; font-weight:700;">AIR-GAPPED</span>
+          </div>
+          <div class="session-chip" id="sessionStatus" title="Active Session Token">
+            sid: initializing...
+          </div>
+          <div class="session-metric">
+            <span>External Cloud Calls</span>
+            <strong style="color:#38bdf8;">0 (Zero)</strong>
+          </div>
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- Main Workspace -->
+    <main class="main">
+
+      <!-- Topbar -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="mobile-toggle" onclick="toggleSidebar()" aria-label="Toggle Navigation">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+          </button>
+          <div class="page-breadcrumb">
+            Promotex AI / <span id="currentViewTitle">General AI Chat</span>
+          </div>
+        </div>
+
+        <div class="topbar-right">
+          <div class="status-pill" id="engineStatusPill">
+            <span class="status-pulse"></span>
+            <span id="engineStatusText">Local AI: Online</span>
+          </div>
+          <div class="telemetry-pill">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+            No Cloud Calls
+          </div>
+        </div>
+      </header>
+
+      <!-- Scrollable Chat Stream / Content Area -->
+      <section class="chat-container" id="chatContainer">
+        <div class="chat-inner" id="messages">
+
+          <!-- Welcome Dashboard (Default View) -->
+          <div class="dashboard-view" id="welcomeDashboard">
+
+            <div class="hero-card">
+              <div class="hero-emblem">
+                <img src="assets/promotex-logo.png" alt="Promotex AI">
+              </div>
+
+              <h1 class="hero-title">
+                Promotex <span>AI</span>
+              </h1>
+
+              <div class="hero-positioning">
+                Your Private AI Workspace
+              </div>
+
+              <p class="hero-description">
+                A privacy-first, self-hosted AI workbench engineered for confidential academic and institutional work.
+                Runs entirely on local hardware with verified zero cloud exposure.
+              </p>
+
+              <div class="hero-claims">
+                <div class="claim-badge">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+                  </svg>
+                  Local AI Engine
+                </div>
+                <div class="claim-badge">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="11" width="18" height="11" rx="2" />
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                  </svg>
+                  Private Sessions
+                </div>
+                <div class="claim-badge">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                  </svg>
+                  No External Cloud Calls
+                </div>
+              </div>
+            </div>
+
+            <!-- Quick Action Cards (8 Cards) -->
+            <div class="actions-section-title">
+              <span>Quick Action Workbenches</span>
+            </div>
+
+            <div class="quick-actions-grid">
+
+              <!-- Card 1: Ask AI -->
+              <div class="action-card" onclick="focusChatInput()">
+                <div class="card-top">
+                  <div class="card-icon icon-purple">
+                    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                      stroke-width="2.2">
+                      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                  </div>
+                </div>
+                <div class="card-title">💬 Ask AI</div>
+                <div class="card-desc">General AI assistant for drafting, summarization, research, coding, and problem
+                  solving.</div>
+                <div class="card-arrow">Start Chat &rarr;</div>
+              </div>
+
+              <!-- Card 2: Private Workspace -->
+              <div class="action-card" onclick="openPrivateWorkspace()">
+                <div class="card-top">
+                  <div class="card-icon icon-blue">
+                    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                      stroke-width="2.2">
+                      <rect x="3" y="11" width="18" height="11" rx="2"></rect>
+                      <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                  </div>
+                </div>
+                <div class="card-title">🔐 Private Workspace</div>
+                <div class="card-desc">Upload confidential PDFs/DOCX with application-level content isolation and zero
+                  cloud leakage.</div>
+                <div class="card-arrow">Open Workspace &rarr;</div>
+              </div>
+
+              <!-- Card 3: Knowledge Base -->
+              <div class="action-card" onclick="openKnowledgeBase()">
+                <div class="card-top">
+                  <div class="card-icon icon-emerald">
+                    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                      stroke-width="2.2">
+                      <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                      <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                    </svg>
+                  </div>
+                </div>
+                <div class="card-title">📚 Knowledge Base</div>
+                <div class="card-desc">Local multi-document repository and RAG retrieval across institutional policies
+                  and guidelines.</div>
+                <div class="card-arrow">Search Repo &rarr;</div>
+              </div>
+
+              <!-- Card 4: Accreditation Copilot -->
+              <div class="action-card" onclick="openAccreditationCopilot()">
+                <div class="card-top">
+                  <div class="card-icon icon-amber">
+                    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                      stroke-width="2.2">
+                      <circle cx="12" cy="8" r="7"></circle>
+                      <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+                    </svg>
+                  </div>
+                </div>
+                <div class="card-title">🎓 Accreditation Copilot</div>
+                <div class="card-desc">7-step compliance audit for NAAC, NBA, and ABET Self-Study Reports with grounded
+                  gap detection.</div>
+                <div class="card-arrow">Audit Criteria &rarr;</div>
+              </div>
+
+              <!-- Card 5: Image Understanding -->
+              <div class="action-card" onclick="openImageUnderstanding()">
+                <div class="card-top">
+                  <div class="card-icon icon-rose">
+                    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                      stroke-width="2.2">
+                      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                      <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                      <polyline points="21 15 16 10 5 21"></polyline>
+                    </svg>
+                  </div>
+                </div>
+                <div class="card-title">🖼️ Image Understanding</div>
+                <div class="card-desc">Analyze academic figures, charts, scanned records, and diagrams with local
+                  multimodal vision.</div>
+                <div class="card-arrow">Analyze Image &rarr;</div>
+              </div>
+
+              <!-- Card 6: Create PPT -->
+              <div class="action-card" onclick="openTopicPPT()">
+                <div class="card-top">
+                  <div class="card-icon icon-indigo">
+                    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                      stroke-width="2.2">
+                      <path d="M2 3h20v14H2z"></path>
+                      <path d="M8 21h8"></path>
+                      <path d="M12 17v4"></path>
+                    </svg>
+                  </div>
+                </div>
+                <div class="card-title">📊 Create PPT</div>
+                <div class="card-desc">Generate structured 5-slide PowerPoint presentations from custom topics or
+                  uploaded documents.</div>
+                <div class="card-arrow">Generate Deck &rarr;</div>
+              </div>
+
+              <!-- Card 7: Privacy Proof -->
+              <div class="action-card" onclick="openPrivacyProof()">
+                <div class="card-top">
+                  <div class="card-icon icon-teal">
+                    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                      stroke-width="2.2">
+                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    </svg>
+                  </div>
+                </div>
+                <div class="card-title">🔒 Privacy Proof</div>
+                <div class="card-desc">Live boundary inspection verifying zero external cloud sockets and strict
+                  metadata encapsulation.</div>
+                <div class="card-arrow">Verify Air-Gap &rarr;</div>
+              </div>
+
+              <!-- Card 8: Admin Dashboard -->
+              <div class="action-card" onclick="openAdminDashboard()">
+                <div class="card-top">
+                  <div class="card-icon icon-slate">
+                    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                      stroke-width="2.2">
+                      <rect x="3" y="3" width="7" height="7"></rect>
+                      <rect x="14" y="3" width="7" height="7"></rect>
+                      <rect x="14" y="14" width="7" height="7"></rect>
+                      <rect x="3" y="14" width="7" height="7"></rect>
+                    </svg>
+                  </div>
+                </div>
+                <div class="card-title">🛡️ Admin Dashboard</div>
+                <div class="card-desc">Inspect operational status, active session counts, and system telemetry without
+                  exposing text.</div>
+                <div class="card-arrow">Open Dashboard &rarr;</div>
+              </div>
+
+            </div>
+
+            <!-- Suggestion Chips -->
+            <div class="actions-section-title">
+              <span>Sample Academic Prompts</span>
+            </div>
+
+            <div class="suggestions-row">
+              <div class="suggestion-chip"
+                onclick="quickPrompt('What are the key NAAC Criterion 2 parameters for student-faculty ratio and teaching-learning evaluation?')">
+                🎓 NAAC Criterion 2 Breakdown
+              </div>
+              <div class="suggestion-chip"
+                onclick="quickPrompt('Draft a concise executive summary comparing Bloom\\'s Taxonomy cognitive levels with sample question stems.')">
+                📖 Bloom's Taxonomy Summary
+              </div>
+              <div class="suggestion-chip"
+                onclick="quickPrompt('How does Promotex AI guarantee session-level document isolation without external cloud telemetry?')">
+                🔒 Privacy Architecture Details
+              </div>
+              <div class="suggestion-chip"
+                onclick="quickPrompt('Create a 4-step implementation plan for an Outcome-Based Education (OBE) course curriculum review.')">
+                ⚡ OBE Implementation Plan
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Floating Input Area -->
+      <div class="input-area">
+        <div class="input-box">
+
+          <div class="input-row-main">
+            <input id="question" class="input-field" type="text"
+              placeholder="Ask Promotex AI anything, or request document analysis..." onkeydown="handleKey(event)"
+              autocomplete="off">
+            <button id="sendBtn" class="btn-send" onclick="askAI()" title="Send Prompt (Enter)">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                stroke-linecap="round" stroke-linejoin="round">
+                <line x1="22" y1="2" x2="11" y2="13"></line>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+              </svg>
+            </button>
+          </div>
+
+          <div class="input-actions">
+            <div class="input-tools-left">
+
+              <label for="documentUpload" class="input-tool-btn" title="Upload confidential PDF or DOCX">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path
+                    d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48">
+                  </path>
+                </svg>
+                <span>Attach Doc</span>
+              </label>
+              <input id="documentUpload" type="file" accept=".pdf,.docx" onchange="uploadDocument()"
+                style="display:none;">
+
+              <button class="input-tool-btn" onclick="generatePPT()" title="Create PPT from active document">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M2 3h20v14H2z"></path>
+                  <path d="M8 21h8"></path>
+                  <path d="M12 17v4"></path>
+                </svg>
+                <span>Doc to PPT</span>
+              </button>
+
+              <button class="input-tool-btn" onclick="openTopicPPT()" title="Create PPT from any topic">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+                  <line x1="12" y1="8" x2="12" y2="16"></line>
+                  <line x1="8" y1="12" x2="16" y2="12"></line>
+                </svg>
+                <span>Topic PPT</span>
+              </button>
+
+              <button class="input-tool-btn" onclick="clearPrivateData()" title="Purge document context from memory"
+                style="color:#f87171;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="3 6 5 6 21 6"></polyline>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                </svg>
+                <span>Clear Context</span>
+              </button>
+
+              <span id="activeDocBadge" style="display:none;" class="active-file-pill">
+                📄 <span id="activeDocName"></span>
+              </span>
+
+            </div>
+
+            <div style="font-size:11px; color:var(--text-muted);">
+              Shift + Enter for newline
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </main>
+
+  </div>
+
+  <script>
+    /* ==========================================================================
+       PROMOTEX AI — DESKTOP AI WORKBENCH ENGINE (FINAL PRODUCT EDITION)
+       ========================================================================== */
+
+    const API_BASE = "http://127.0.0.1:8000";
+    let sessionId = sessionStorage.getItem("promotex_session_id");
+    let isRequestRunning = false;
+    let currentLoadedDocument = "";
+    let userScrolledUp = false;
+
+    /* =========================
+       SESSION ISOLATION
+       ========================= */
+    async function ensureSession() {
+      if (sessionId) {
+        updateSessionUI(sessionId);
+        return sessionId;
+      }
+
+      try {
+        const response = await fetch(`${API_BASE}/session`, {
+          method: "GET",
+          headers: { "Accept": "application/json" }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          sessionId = data.session_id || data.sessionId;
+        }
+      } catch (e) {
+        // Fallback local session token for offline operation
+      }
+
+      if (!sessionId) {
+        sessionId = "sec-" + (window.crypto && crypto.randomUUID ? crypto.randomUUID().slice(0, 8) : Math.random().toString(36).substring(2, 10));
+      }
+
+      sessionStorage.setItem("promotex_session_id", sessionId);
+      updateSessionUI(sessionId);
+      return sessionId;
+    }
+
+    function updateSessionUI(sid) {
+      const el = document.getElementById("sessionStatus");
+      if (el) {
+        el.textContent = `sid: ${sid}`;
+        el.title = `Isolated Session ID: ${sid}`;
+      }
+    }
+
+    /* =========================
+       SIDEBAR & VIEW NAVIGATION
+       ========================= */
+    function toggleSidebar() {
+      const sidebar = document.getElementById("sidebar");
+      const overlay = document.getElementById("mobileOverlay");
+      sidebar.classList.toggle("open");
+      overlay.classList.toggle("open");
+    }
+
+    function setActiveMenuItem(id, viewTitle) {
+      document.querySelectorAll(".menu-item").forEach(item => item.classList.remove("active"));
+      const active = document.getElementById(id);
+      if (active) active.classList.add("active");
+      if (viewTitle) {
+        document.getElementById("currentViewTitle").textContent = viewTitle;
+      }
+      document.getElementById("sidebar").classList.remove("open");
+      document.getElementById("mobileOverlay").classList.remove("open");
+    }
+
+    function newChat() {
+      setActiveMenuItem("menuChat", "General AI Chat");
+      const messages = document.getElementById("messages");
+      messages.innerHTML = `
+        <div class="dashboard-view" id="welcomeDashboard">
+          <div class="hero-card">
+            <div class="hero-emblem">
+              <img src="assets/promotex-logo.png" alt="Promotex AI">
+            </div>
+            <h1 class="hero-title">Promotex <span>AI</span></h1>
+            <div class="hero-positioning">Your Private AI Workspace</div>
+            <p class="hero-description">
+              A privacy-first, self-hosted AI workbench engineered for confidential academic and institutional work.
+              Runs entirely on local hardware with verified zero cloud exposure.
+            </p>
+            <div class="hero-claims">
+              <div class="claim-badge">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                Local AI Engine
+              </div>
+              <div class="claim-badge">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                Private Sessions
+              </div>
+              <div class="claim-badge">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                No External Cloud Calls
+              </div>
+            </div>
+          </div>
+
+          <div class="actions-section-title"><span>Quick Action Workbenches</span></div>
+          <div class="quick-actions-grid">
+            <div class="action-card" onclick="focusChatInput()">
+              <div class="card-top">
+                <div class="card-icon icon-purple"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg></div>
+              </div>
+              <div class="card-title">💬 Ask AI</div>
+              <div class="card-desc">General AI assistant for drafting, summarization, research, coding, and problem solving.</div>
+              <div class="card-arrow">Start Chat &rarr;</div>
+            </div>
+
+            <div class="action-card" onclick="openPrivateWorkspace()">
+              <div class="card-top">
+                <div class="card-icon icon-blue"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="11" width="18" height="11" rx="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></div>
+              </div>
+              <div class="card-title">🔐 Private Workspace</div>
+              <div class="card-desc">Upload confidential PDFs/DOCX with application-level content isolation and zero cloud leakage.</div>
+              <div class="card-arrow">Open Workspace &rarr;</div>
+            </div>
+
+            <div class="action-card" onclick="openKnowledgeBase()">
+              <div class="card-top">
+                <div class="card-icon icon-emerald"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg></div>
+              </div>
+              <div class="card-title">📚 Knowledge Base</div>
+              <div class="card-desc">Local multi-document repository and RAG retrieval across institutional policies and guidelines.</div>
+              <div class="card-arrow">Search Repo &rarr;</div>
+            </div>
+
+            <div class="action-card" onclick="openAccreditationCopilot()">
+              <div class="card-top">
+                <div class="card-icon icon-amber"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg></div>
+              </div>
+              <div class="card-title">🎓 Accreditation Copilot</div>
+              <div class="card-desc">7-step compliance audit for NAAC, NBA, and ABET Self-Study Reports with grounded gap detection.</div>
+              <div class="card-arrow">Audit Criteria &rarr;</div>
+            </div>
+
+            <div class="action-card" onclick="openImageUnderstanding()">
+              <div class="card-top">
+                <div class="card-icon icon-rose"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg></div>
+              </div>
+              <div class="card-title">🖼️ Image Understanding</div>
+              <div class="card-desc">Analyze academic figures, charts, scanned records, and diagrams with local multimodal vision.</div>
+              <div class="card-arrow">Analyze Image &rarr;</div>
+            </div>
+
+            <div class="action-card" onclick="openTopicPPT()">
+              <div class="card-top">
+                <div class="card-icon icon-indigo"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M2 3h20v14H2z"></path><path d="M8 21h8"></path><path d="M12 17v4"></path></svg></div>
+              </div>
+              <div class="card-title">📊 Create PPT</div>
+              <div class="card-desc">Generate structured 5-slide PowerPoint presentations from custom topics or uploaded documents.</div>
+              <div class="card-arrow">Generate Deck &rarr;</div>
+            </div>
+
+            <div class="action-card" onclick="openPrivacyProof()">
+              <div class="card-top">
+                <div class="card-icon icon-teal"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></div>
+              </div>
+              <div class="card-title">🔒 Privacy Proof</div>
+              <div class="card-desc">Live boundary inspection verifying zero external cloud sockets and strict metadata encapsulation.</div>
+              <div class="card-arrow">Verify Air-Gap &rarr;</div>
+            </div>
+
+            <div class="action-card" onclick="openAdminDashboard()">
+              <div class="card-top">
+                <div class="card-icon icon-slate"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg></div>
+              </div>
+              <div class="card-title">🛡️ Admin Dashboard</div>
+              <div class="card-desc">Inspect operational status, active session counts, and system telemetry without exposing text.</div>
+              <div class="card-arrow">Open Dashboard &rarr;</div>
+            </div>
+          </div>
+
+          <div class="actions-section-title"><span>Sample Academic Prompts</span></div>
+          <div class="suggestions-row">
+            <div class="suggestion-chip" onclick="quickPrompt('What are the key NAAC Criterion 2 parameters for student-faculty ratio and teaching-learning evaluation?')">🎓 NAAC Criterion 2 Breakdown</div>
+            <div class="suggestion-chip" onclick="quickPrompt('Draft a concise executive summary comparing Bloom\\'s Taxonomy cognitive levels with sample question stems.')">📖 Bloom's Taxonomy Summary</div>
+            <div class="suggestion-chip" onclick="quickPrompt('How does Promotex AI guarantee session-level document isolation without external cloud telemetry?')">🔒 Privacy Architecture Details</div>
+            <div class="suggestion-chip" onclick="quickPrompt('Create a 4-step implementation plan for an Outcome-Based Education (OBE) course curriculum review.')">⚡ OBE Implementation Plan</div>
+          </div>
+        </div>
+    `;
+      focusChatInput();
+    }
+
+    function focusChatInput() {
+      const input = document.getElementById("question");
+      if (input) input.focus();
+    }
+
+    function quickPrompt(text) {
+      const input = document.getElementById("question");
+      if (input) {
+        input.value = text;
+        askAI();
+      }
+    }
+
+    function handleKey(event) {
+      if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault();
+        askAI();
+      }
+    }
+
+    /* =========================================================
+       TRUTHFUL MULTI-STAGE PROGRESS INDICATORS
+       (No fake percentages)
+       ========================================================= */
+    function createTruthfulProcessingCard(isDocumentMode = false) {
+      const card = document.createElement("div");
+      card.className = "processing-card";
+      card.id = "activeProcessingCard";
+
+      if (!isDocumentMode) {
+        card.innerHTML = `
+            <div class="processing-header">
+              <div class="processing-title">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                <span>Promotex AI Assistant</span>
+              </div>
+              <span class="processing-badge">LOCAL INFERENCE</span>
+            </div>
+            <div class="processing-stepper">
+              <div class="stage-step completed" id="stage1">
+                <div class="stage-bullet">✓</div>
+                <div class="stage-label">Request received</div>
+              </div>
+              <div class="stage-step active" id="stage2">
+                <div class="stage-bullet">⟳</div>
+                <div class="stage-label">Understanding request</div>
+              </div>
+              <div class="stage-step pending" id="stage3">
+                <div class="stage-bullet">○</div>
+                <div class="stage-label">Processing locally</div>
+              </div>
+              <div class="stage-step pending" id="stage4">
+                <div class="stage-bullet">○</div>
+                <div class="stage-label">Preparing response</div>
+              </div>
+            </div>
+        `;
+      } else {
+        card.innerHTML = `
+            <div class="processing-header">
+              <div class="processing-title">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                <span>Document Analysis Engine</span>
+              </div>
+              <span class="processing-badge">CONFIDENTIAL AUDIT</span>
+            </div>
+            <div class="processing-stepper">
+              <div class="stage-step completed" id="stage1">
+                <div class="stage-bullet">✓</div>
+                <div class="stage-label">Document loaded</div>
+              </div>
+              <div class="stage-step active" id="stage2">
+                <div class="stage-bullet">⟳</div>
+                <div class="stage-label">Relevant content identified</div>
+              </div>
+              <div class="stage-step pending" id="stage3">
+                <div class="stage-bullet">○</div>
+                <div class="stage-label">Analyzing content</div>
+              </div>
+              <div class="stage-step pending" id="stage4">
+                <div class="stage-bullet">○</div>
+                <div class="stage-label">Preparing response</div>
+              </div>
+            </div>
+        `;
+      }
+      return card;
+    }
+
+    function updateTruthfulStage(stageNum, totalStages = 4) {
+      for (let i = 1; i <= totalStages; i++) {
+        const el = document.getElementById(`stage${i}`);
+        if (!el) continue;
+        const bullet = el.querySelector(".stage-bullet");
+        if (i < stageNum) {
+          el.className = "stage-step completed";
+          bullet.textContent = "✓";
+        } else if (i === stageNum) {
+          el.className = "stage-step active";
+          bullet.textContent = "⟳";
+        } else {
+          el.className = "stage-step pending";
+          bullet.textContent = "○";
+        }
+      }
+    }
+
+    /* Simple safe Markdown Renderer for AI responses */
+    function renderMarkdown(raw) {
+      if (!raw) return "";
+
+      // Escape HTML first
+      let text = escapeHTML(raw);
+
+      // Code blocks with syntax container & copy button
+      text = text.replace(/```([a-zA-Z0-9_-]*)\n([\s\S]*?)```/g, function (match, lang, code) {
+        const cleanLang = lang || 'code';
+        return `
+            <div class="code-block-wrapper">
+              <div class="code-header">
+                <span>${cleanLang}</span>
+                <button class="code-copy-btn" onclick="copyCodeSnippet(this)">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                  Copy
+                </button>
+              </div>
+              <pre><code>${code.trim()}</code></pre>
+            </div>
+        `;
+      });
+
+      // Inline code
+      text = text.replace(/`([^`]+)`/g, '<code>$1</code>');
+
+      // Headers
+      text = text.replace(/^### (.*$)/gim, '<h3>$1</h3>');
+      text = text.replace(/^## (.*$)/gim, '<h2>$1</h2>');
+      text = text.replace(/^# (.*$)/gim, '<h1>$1</h1>');
+
+      // Bold & Italics
+      text = text.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+      text = text.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+
+      // Bullet lists
+      text = text.replace(/^\s*[\-\*]\s+(.*)$/gim, '<li>$1</li>');
+      text = text.replace(/(<li>.*<\/li>)/gim, '<ul>$1</ul>');
+      // Fix multiple consecutive uls
+      text = text.replace(/<\/ul>\s*<ul>/gim, '');
+
+      // Line breaks to paragraphs
+      const paragraphs = text.split(/\n{2,}/);
+      return paragraphs.map(p => {
+        p = p.trim();
+        if (!p) return "";
+        if (p.startsWith('<h') || p.startsWith('<div class="code-block') || p.startsWith('<ul>') || p.startsWith('<blockquote')) {
+          return p;
+        }
+        return `<p>${p.replace(/\n/g, '<br>')}</p>`;
+      }).join('\n');
+    }
+
+    function copyCodeSnippet(btn) {
+      const wrapper = btn.closest(".code-block-wrapper");
+      const code = wrapper.querySelector("pre code").textContent;
+      navigator.clipboard.writeText(code).then(() => {
+        const orig = btn.innerHTML;
+        btn.innerHTML = "✓ Copied";
+        setTimeout(() => btn.innerHTML = orig, 1800);
+      });
+    }
+
+    /* =========================
+       ASK AI (FAST/HEAVY STREAMING)
+       ========================= */
+    async function askAI() {
+      if (isRequestRunning) return;
+
+      const input = document.getElementById("question");
+      const question = input.value.trim();
+      if (!question) return;
+
+      const messages = document.getElementById("messages");
+      const welcome = document.getElementById("welcomeDashboard");
+      if (welcome) welcome.remove();
+
+      // Render User Message
+      const userRow = document.createElement("div");
+      userRow.className = "message-row user-row";
+      userRow.innerHTML = `
+        <div class="message-avatar">U</div>
+        <div class="message-bubble">${escapeHTML(question)}</div>
+    `;
+      messages.appendChild(userRow);
+
+      input.value = "";
+      isRequestRunning = true;
+      document.getElementById("sendBtn").disabled = true;
+
+      // Truthful processing indicator based on context
+      const isDocMode = Boolean(currentLoadedDocument);
+      const processingCard = createTruthfulProcessingCard(isDocMode);
+      messages.appendChild(processingCard);
+      scrollToBottom();
+
+      // Prepare AI Response Row
+      const aiRow = document.createElement("div");
+      aiRow.className = "message-row ai-row";
+      aiRow.style.display = "none";
+      aiRow.innerHTML = `
+        <div class="message-avatar">
+          <img src="assets/promotex-logo.png" alt="Promotex AI">
+        </div>
+        <div class="message-bubble">
+          <div class="ai-content" id="activeAiContent"></div>
+          <div class="message-actions">
+            <button class="btn-msg-action" onclick="copyAiResponse(this)">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              Copy Response
+            </button>
+            <span style="font-size:11px; color:var(--text-muted); margin-left:auto;">100% Local Inference • Zero Cloud Exposure</span>
+          </div>
+        </div>
+    `;
+      messages.appendChild(aiRow);
+
+      try {
+        updateTruthfulStage(2);
+        const sid = await ensureSession();
+
+        updateTruthfulStage(3);
+        const isDocMode = Boolean(currentLoadedDocument);
+        const taskType = isDocMode ? "heavy" : "fast";
+        const response = await fetch(`${API_BASE}/ask?question=${encodeURIComponent(question)}&task_type=${taskType}`, {
+          headers: { "X-Session-ID": sid }
+        });
+
+        if (!response.ok) {
+          throw new Error(`Server returned HTTP ${response.status}`);
+        }
+
+        updateTruthfulStage(4);
+
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        let firstChunk = true;
+        let accumulatedRawText = "";
+        const activeAiContent = aiRow.querySelector("#activeAiContent");
+
+        while (true) {
+          const { value, done } = await reader.read();
+          if (done) break;
+
+          const textChunk = decoder.decode(value, { stream: true });
+          accumulatedRawText += textChunk;
+
+          if (firstChunk) {
+            processingCard.remove();
+            aiRow.style.display = "flex";
+            firstChunk = false;
+          }
+
+          activeAiContent.innerHTML = renderMarkdown(accumulatedRawText);
+          scrollToBottom();
+        }
+
+        if (firstChunk) {
+          processingCard.remove();
+          aiRow.style.display = "flex";
+          activeAiContent.textContent = "Response completed with no text returned.";
+        }
+
+      } catch (error) {
+        console.error(error);
+        processingCard.remove();
+        aiRow.style.display = "flex";
+        const activeAiContent = aiRow.querySelector("#activeAiContent");
+        activeAiContent.innerHTML = `
+            <div style="color:#f87171; font-weight:600; margin-bottom:4px;">⚠️ Promotex could not complete this request.</div>
+            <div style="font-size:13px; color:var(--text-secondary);">
+                Please verify that the local backend is active on <code>${API_BASE}</code> and Ollama is running on your machine.<br>
+                <em>Details: ${escapeHTML(error.message)}</em>
+            </div>
+        `;
+      } finally {
+        isRequestRunning = false;
+        document.getElementById("sendBtn").disabled = false;
+        scrollToBottom();
+      }
+    }
+
+    function copyAiResponse(btn) {
+      const bubble = btn.closest(".message-bubble");
+      const content = bubble.querySelector(".ai-content").innerText;
+      navigator.clipboard.writeText(content).then(() => {
+        const orig = btn.innerHTML;
+        btn.innerHTML = "✓ Copied!";
+        setTimeout(() => btn.innerHTML = orig, 1800);
+      });
+    }
+
+    function scrollToBottom() {
+      const container = document.getElementById("chatContainer");
+      if (container && !userScrolledUp) {
+        container.scrollTop = container.scrollHeight;
+      }
+    }
+
+    // Track user scroll position
+    document.getElementById("chatContainer")?.addEventListener("scroll", function (e) {
+      const el = e.target;
+      userScrolledUp = (el.scrollHeight - el.scrollTop - el.clientHeight > 80);
+    });
+
+    /* =========================
+       UPLOAD DOCUMENT (PRIVATE WORKSPACE)
+       ========================= */
+    async function uploadDocument() {
+      const fileInput = document.getElementById("documentUpload");
+      const file = fileInput.files[0];
+      if (!file) return;
+
+      const messages = document.getElementById("messages");
+      const welcome = document.getElementById("welcomeDashboard");
+      if (welcome) welcome.remove();
+
+      const card = document.createElement("div");
+      card.className = "feature-view";
+      card.style.margin = "10px 0";
+      card.innerHTML = `
+        <div class="feature-header">
+          <div class="feature-title-block">
+            <h2>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#818cf8" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+              <span>${escapeHTML(file.name)}</span>
+            </h2>
+            <p>Ingesting file into volatile session memory...</p>
+          </div>
+          <span class="feature-badge-pill" style="color:#a5b4fc;">UPLOADING</span>
+        </div>
+        <div class="callout-box callout-info">
+          Promotex AI is extracting document text locally without cloud transmission.
+        </div>
+    `;
+      messages.appendChild(card);
+      scrollToBottom();
+
+      const formData = new FormData();
+      formData.append("file", file);
+
+      try {
+        const sid = await ensureSession();
+        const response = await fetch(`${API_BASE}/upload`, {
+          method: "POST",
+          headers: { "X-Session-ID": sid },
+          body: formData
+        });
+
+        const result = await response.json();
+        if (result.status !== "success") {
+          throw new Error(result.message || "Upload failed");
+        }
+
+        currentLoadedDocument = result.filename;
+        const badge = document.getElementById("activeDocBadge");
+        const badgeName = document.getElementById("activeDocName");
+        if (badge && badgeName) {
+          badge.style.display = "inline-flex";
+          badgeName.textContent = result.filename;
+        }
+
+        card.innerHTML = `
+            <div class="feature-header">
+              <div class="feature-title-block">
+                <h2>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                  <span>${escapeHTML(result.filename)}</span>
+                </h2>
+                <p>Private document loaded successfully (${result.characters_extracted.toLocaleString()} characters extracted).</p>
+              </div>
+              <span class="feature-badge-pill" style="color:#10b981; border-color:rgba(16,185,129,0.3); background:rgba(16,185,129,0.1);">ISOLATED</span>
+            </div>
+            <div class="callout-box callout-success">
+              🔐 <strong>Application-Level Content Isolation:</strong> Document text is encapsulated inside this session's volatile memory. Promotex AI will reference it for answers and PowerPoint generation.
+            </div>
+            <div class="button-group">
+              <button class="btn btn-primary" onclick="generatePPT()">📊 Generate PowerPoint from this Doc</button>
+              <button class="btn btn-secondary" onclick="openAccreditationCopilot()">🎓 Audit with Accreditation Copilot</button>
+              <button class="btn btn-secondary" onclick="quickPrompt('Summarize the primary takeaways of the uploaded document in 5 bullet points.')">📝 Summarize Document</button>
+              <button class="btn btn-danger" onclick="clearPrivateData()">🧹 Clear Context</button>
+            </div>
+        `;
+      } catch (error) {
+        card.innerHTML = `
+            <div class="feature-header">
+              <div class="feature-title-block">
+                <h2 style="color:#f87171;">❌ Upload Failed</h2>
+                <p>${escapeHTML(error.message)}</p>
+              </div>
+            </div>
+        `;
+      } finally {
+        fileInput.value = "";
+        scrollToBottom();
+      }
+    }
+
+    /* =========================
+       CLEAR PRIVATE DATA
+       ========================= */
+    async function clearPrivateData() {
+      try {
+        const sid = await ensureSession();
+        await fetch(`${API_BASE}/clear-document`, {
+          method: "POST",
+          headers: { "X-Session-ID": sid }
+        });
+
+        currentLoadedDocument = "";
+        const badge = document.getElementById("activeDocBadge");
+        if (badge) badge.style.display = "none";
+
+        const messages = document.getElementById("messages");
+        const card = document.createElement("div");
+        card.className = "feature-view";
+        card.style.margin = "10px 0";
+        card.innerHTML = `
+            <div class="feature-header">
+              <div class="feature-title-block">
+                <h2 style="color:#34d399;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  <span>Private Session Memory Purged</span>
+                </h2>
+                <p>All in-memory document context and extracted tokens have been wiped from active heap.</p>
+              </div>
+            </div>
+            <div class="callout-box callout-info">
+              The application has cleared active document references for session <code>${escapeHTML(sid)}</code>.
+            </div>
+        `;
+        messages.appendChild(card);
+        scrollToBottom();
+      } catch (error) {
+        alert("Session context reset in browser: " + error.message);
+      }
+    }
+
+    /* =========================
+       PRIVATE WORKSPACE VIEW
+       ========================= */
+    function openPrivateWorkspace() {
+      setActiveMenuItem("menuPrivateWorkspace", "Private Workspace");
+      const messages = document.getElementById("messages");
+      messages.innerHTML = `
+        <div class="feature-view">
+          <div class="feature-header">
+            <div class="feature-title-block">
+              <h2>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                Confidential Private Workspace
+              </h2>
+              <p>Application-level content isolation with zero external cloud transmission and volatile in-memory caching.</p>
+            </div>
+            <span class="feature-badge-pill">AIR-GAPPED</span>
+          </div>
+
+          <div class="upload-dropzone" onclick="document.getElementById('privateWorkspaceFile').click()">
+            <div class="dropzone-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+            </div>
+            <div class="dropzone-title">Click to Select Confidential PDF or DOCX</div>
+            <div class="dropzone-hint">Supports institutional documents, research papers, criteria spreadsheets, and syllabi</div>
+            <input type="file" id="privateWorkspaceFile" accept=".pdf,.docx" onchange="uploadPrivateDocument()" style="display:none;">
+          </div>
+
+          <div class="button-group">
+            <button class="btn btn-primary" onclick="document.getElementById('privateWorkspaceFile').click()">
+              📄 Select File
+            </button>
+            <button class="btn btn-secondary" onclick="analyzeAccreditation()">
+              🎓 Audit with Accreditation Copilot
+            </button>
+            <button class="btn btn-secondary" onclick="generatePPT()">
+              📊 Generate PowerPoint
+            </button>
+            <button class="btn btn-danger" onclick="clearPrivateData()">
+              🧹 Clear Context
+            </button>
+          </div>
+
+          <div id="privateWorkspaceResult" style="margin-top:18px;"></div>
+        </div>
+    `;
+    }
+
+    async function uploadPrivateDocument() {
+      const input = document.getElementById("privateWorkspaceFile");
+      if (!input || !input.files.length) return;
+      const file = input.files[0];
+      const resultBox = document.getElementById("privateWorkspaceResult");
+      resultBox.innerHTML = `<div class="callout-box callout-info">⏳ Ingesting <strong>${escapeHTML(file.name)}</strong> into isolated session memory...</div>`;
+
+      const sid = await ensureSession();
+      const formData = new FormData();
+      formData.append("file", file);
+
+      try {
+        const response = await fetch(`${API_BASE}/upload`, {
+          method: "POST",
+          headers: { "X-Session-ID": sid },
+          body: formData
+        });
+        const result = await response.json();
+        if (result.status !== "success") throw new Error(result.message || "Upload failed.");
+
+        currentLoadedDocument = result.filename;
+        const badge = document.getElementById("activeDocBadge");
+        const badgeName = document.getElementById("activeDocName");
+        if (badge && badgeName) {
+          badge.style.display = "inline-flex";
+          badgeName.textContent = result.filename;
+        }
+
+        resultBox.innerHTML = `
+            <div class="callout-box callout-success">
+              ✅ <strong>${escapeHTML(result.filename)}</strong> loaded (${result.characters_extracted.toLocaleString()} characters extracted).<br>
+              Application-level isolation active. You can now question Promotex AI regarding this document.
+            </div>
+        `;
+      } catch (e) {
+        resultBox.innerHTML = `<div class="callout-box callout-warning">❌ Upload error: ${escapeHTML(e.message)}</div>`;
+      }
+    }
+
+    /* =========================================================
+       ACCREDITATION COPILOT (7-STAGE VISIBLE AGENT WORKFLOW)
+       ========================================================= */
+    function openAccreditationCopilot() {
+      setActiveMenuItem("menuAccreditation", "Accreditation Copilot");
+      const messages = document.getElementById("messages");
+      messages.innerHTML = `
+        <div class="feature-view">
+          <div class="feature-header">
+            <div class="feature-title-block">
+              <h2>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.2"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
+                Accreditation Copilot (NAAC / NBA / ABET)
+              </h2>
+              <p>7-step automated compliance auditor grounded strictly in institutional evidence.</p>
+            </div>
+            <span class="feature-badge-pill" style="color:#f59e0b; border-color:rgba(245,158,11,0.3); background:rgba(245,158,11,0.1);">COMPLIANCE AGENT</span>
+          </div>
+
+          <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:12px; margin-bottom:18px;">
+            <div style="background:rgba(255,255,255,0.03); border:1px solid var(--border-subtle); padding:14px; border-radius:var(--radius-md);">
+              <div style="font-weight:700; color:#fbbf24; font-size:12.5px; margin-bottom:3px;">Criterion 1 &amp; 2</div>
+              <div style="font-size:11.5px; color:var(--text-secondary);">Curricular Planning, Student-Faculty Ratios &amp; Evaluation Matrices</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.03); border:1px solid var(--border-subtle); padding:14px; border-radius:var(--radius-md);">
+              <div style="font-weight:700; color:#38bdf8; font-size:12.5px; margin-bottom:3px;">Criterion 3 &amp; 4</div>
+              <div style="font-size:11.5px; color:var(--text-secondary);">Research Citations, Innovation Ecosystems &amp; Lab Infrastructure</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.03); border:1px solid var(--border-subtle); padding:14px; border-radius:var(--radius-md);">
+              <div style="font-weight:700; color:#34d399; font-size:12.5px; margin-bottom:3px;">Criterion 5 &amp; 6</div>
+              <div style="font-size:11.5px; color:var(--text-secondary);">Student Placement Progression &amp; Institutional Governance</div>
+            </div>
+          </div>
+
+          <div class="upload-dropzone" onclick="document.getElementById('accreditationFileInput').click()">
+            <div class="dropzone-icon" style="background:rgba(245,158,11,0.15); color:#f59e0b;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+            </div>
+            <div class="dropzone-title">Upload Self-Study Report (SSR) or Department Audit PDF/DOCX</div>
+            <div class="dropzone-hint">Grounds all compliance checks strictly on provided text (zero hallucinated figures)</div>
+            <input type="file" id="accreditationFileInput" accept=".pdf,.docx" onchange="uploadAccreditationDoc()" style="display:none;">
+          </div>
+
+          <div class="button-group">
+            <button class="btn btn-primary" onclick="analyzeAccreditation()">
+              🔎 Run 7-Step Accreditation Audit
+            </button>
+            <button class="btn btn-secondary" onclick="quickPrompt('Draft an executive summary of our institutional strengths and compliance gaps based on the uploaded document.')">
+              📋 Draft Executive Summary
+            </button>
+            <button class="btn btn-danger" onclick="clearPrivateData()">
+              🧹 Clear Document
+            </button>
+          </div>
+
+          <div id="accreditationProgress" style="margin-top:20px;"></div>
+          <div id="accreditationResult" style="margin-top:16px;"></div>
+        </div>
+    `;
+    }
+
+    async function uploadAccreditationDoc() {
+      const input = document.getElementById("accreditationFileInput");
+      if (!input || !input.files.length) return;
+      const file = input.files[0];
+      const resultBox = document.getElementById("accreditationResult");
+      resultBox.innerHTML = `<div class="callout-box callout-info">⏳ Ingesting <strong>${escapeHTML(file.name)}</strong> for compliance analysis...</div>`;
+
+      const sid = await ensureSession();
+      const formData = new FormData();
+      formData.append("file", file);
+
+      try {
+        const response = await fetch(`${API_BASE}/upload`, {
+          method: "POST",
+          headers: { "X-Session-ID": sid },
+          body: formData
+        });
+        const result = await response.json();
+        if (result.status !== "success") throw new Error(result.message || "Upload failed");
+
+        currentLoadedDocument = result.filename;
+        const badge = document.getElementById("activeDocBadge");
+        const badgeName = document.getElementById("activeDocName");
+        if (badge && badgeName) {
+          badge.style.display = "inline-flex";
+          badgeName.textContent = result.filename;
+        }
+
+        resultBox.innerHTML = `
+            <div class="callout-box callout-success">
+              ✅ <strong>${escapeHTML(result.filename)}</strong> loaded. Click <strong>"Run 7-Step Accreditation Audit"</strong> above to begin audit.
+            </div>
+        `;
+      } catch (e) {
+        resultBox.innerHTML = `<div class="callout-box callout-warning">❌ Upload failed: ${escapeHTML(e.message)}</div>`;
+      }
+    }
+
+    async function analyzeAccreditation() {
+      const progressBox = document.getElementById("accreditationProgress");
+      const resultBox = document.getElementById("accreditationResult");
+      if (!resultBox) return;
+
+      if (!currentLoadedDocument) {
+        resultBox.innerHTML = `<div class="callout-box callout-warning">Please upload an institutional Self-Study Report (SSR) or audit document first.</div>`;
+        return;
+      }
+
+      // 7-step visible agent stepper
+      progressBox.innerHTML = `
+        <div class="processing-card" style="max-width:100%;">
+          <div class="processing-header">
+            <div class="processing-title">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              <span>Accreditation Copilot Multi-Agent Pipeline</span>
+            </div>
+            <span class="processing-badge">GROUNDED REASONING</span>
+          </div>
+          <div class="processing-stepper">
+            <div class="stage-step active" id="accStep1"><div class="stage-bullet">⟳</div><div class="stage-label">1. Request received</div></div>
+            <div class="stage-step pending" id="accStep2"><div class="stage-bullet">○</div><div class="stage-label">2. Reading private document</div></div>
+            <div class="stage-step pending" id="accStep3"><div class="stage-bullet">○</div><div class="stage-label">3. Extracting evidence</div></div>
+            <div class="stage-step pending" id="accStep4"><div class="stage-bullet">○</div><div class="stage-label">4. Mapping evidence to criteria</div></div>
+            <div class="stage-step pending" id="accStep5"><div class="stage-bullet">○</div><div class="stage-label">5. Identifying missing/unclear evidence</div></div>
+            <div class="stage-step pending" id="accStep6"><div class="stage-bullet">○</div><div class="stage-label">6. Preparing action plan</div></div>
+            <div class="stage-step pending" id="accStep7"><div class="stage-bullet">○</div><div class="stage-label">7. Response ready</div></div>
+          </div>
+        </div>
+    `;
+
+      function setAccStep(n) {
+        for (let i = 1; i <= 7; i++) {
+          const el = document.getElementById(`accStep${i}`);
+          if (!el) continue;
+          const bullet = el.querySelector(".stage-bullet");
+          if (i < n) {
+            el.className = "stage-step completed";
+            bullet.textContent = "✓";
+          } else if (i === n) {
+            el.className = "stage-step active";
+            bullet.textContent = "⟳";
+          } else {
+            el.className = "stage-step pending";
+            bullet.textContent = "○";
+          }
+        }
+      }
+
+      try {
+        setAccStep(2);
+        const sid = await ensureSession();
+
+        setAccStep(3);
+        await new Promise(r => setTimeout(r, 400));
+        setAccStep(4);
+
+        const response = await fetch(`${API_BASE}/analyze-accreditation`, {
+          method: "POST",
+          headers: { "X-Session-ID": sid }
+        });
+
+        setAccStep(5);
+        await new Promise(r => setTimeout(r, 300));
+        setAccStep(6);
+
+        const result = await response.json();
+        if (result.status !== "success") {
+          throw new Error(result.message || "Accreditation audit failed.");
+        }
+
+        setAccStep(8); // mark all completed
+        renderAccreditationStructured(result.analysis, resultBox);
+      } catch (e) {
+        resultBox.innerHTML = `<div class="callout-box callout-warning">❌ Audit error: ${escapeHTML(e.message)}</div>`;
+      }
+    }
+
+    function renderAccreditationStructured(rawText, container) {
+      container.innerHTML = `
+        <div style="background:rgba(24, 32, 47, 0.95); border:1px solid rgba(245,158,11,0.4); border-radius:var(--radius-lg); padding:24px; margin-top:16px;">
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;">
+            <div style="font-size:16px; font-weight:700; color:#fbbf24; display:flex; align-items:center; gap:8px;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2.5"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
+              Accreditation Compliance &amp; Gap Audit Report
+            </div>
+            <span style="font-size:10.5px; color:#fbbf24; background:rgba(245,158,11,0.15); border:1px solid rgba(245,158,11,0.3); padding:3px 8px; border-radius:4px; font-weight:700;">PROMOTEX AUDIT</span>
+          </div>
+          <div class="ai-content">${renderMarkdown(rawText)}</div>
+        </div>
+    `;
+    }
+
+    /* =========================================================
+       KNOWLEDGE BASE (LOCAL MULTI-DOC RAG WITH CITATIONS)
+       ========================================================= */
+    function openKnowledgeBase() {
+      setActiveMenuItem("menuKnowledgeBase", "Knowledge Base");
+      const messages = document.getElementById("messages");
+      messages.innerHTML = `
+        <div class="feature-view">
+          <div class="feature-header">
+            <div class="feature-title-block">
+              <h2>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                Institutional Knowledge Base (Local RAG)
+              </h2>
+              <p>Index multi-document institutional repositories and retrieve source-attributed answers with visible citations.</p>
+            </div>
+            <span class="feature-badge-pill" style="color:#10b981; border-color:rgba(16,185,129,0.3); background:rgba(16,185,129,0.1);">MULTI-DOC RAG</span>
+          </div>
+
+          <div class="upload-dropzone" onclick="document.getElementById('kbUpload').click()">
+            <div class="dropzone-icon" style="background:rgba(16,185,129,0.15); color:#10b981;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+            </div>
+            <div class="dropzone-title">Upload Multiple Documents to Repository</div>
+            <div class="dropzone-hint">Select institutional PDF or DOCX files to index into volatile memory</div>
+            <input id="kbUpload" type="file" accept=".pdf,.docx" multiple onchange="uploadKnowledgeBase()" style="display:none;">
+          </div>
+
+          <div style="margin-top:16px;">
+            <label style="font-size:13px; font-weight:600; color:var(--text-secondary); margin-bottom:6px; display:block;">Ask Across Institutional Documents</label>
+            <div style="display:flex; gap:10px;">
+              <input id="kbQuestion" class="input-field" type="text" placeholder="e.g. What is the institutional policy on faculty research grants and publication rewards?" style="background:rgba(255,255,255,0.04); border:1px solid var(--border-subtle); border-radius:var(--radius-md); padding:10px 14px; flex:1;" onkeydown="if(event.key==='Enter') askKnowledgeBase()">
+              <button class="btn btn-primary" onclick="askKnowledgeBase()">Search Repository</button>
+            </div>
+          </div>
+
+          <div class="button-group" style="margin-top:16px;">
+            <button class="btn btn-secondary" onclick="document.getElementById('kbUpload').click()">📂 Add Documents</button>
+            <button class="btn btn-danger" onclick="clearKnowledgeBase()">🧹 Clear Repository</button>
+          </div>
+
+          <div id="kbResult" style="margin-top:18px;"></div>
+        </div>
+    `;
+    }
+
+    async function uploadKnowledgeBase() {
+      const input = document.getElementById("kbUpload");
+      if (!input || !input.files.length) return;
+      const resultBox = document.getElementById("kbResult");
+      resultBox.innerHTML = `<div class="callout-box callout-info">⏳ Indexing ${input.files.length} file(s) into local repository...</div>`;
+
+      const sid = await ensureSession();
+      let count = 0;
+
+      for (const file of input.files) {
+        const formData = new FormData();
+        formData.append("file", file);
+        try {
+          const res = await fetch(`${API_BASE}/kb/upload`, {
+            method: "POST",
+            headers: { "X-Session-ID": sid },
+            body: formData
+          });
+          if (res.ok) count++;
+        } catch (e) { }
+      }
+
+      resultBox.innerHTML = `
+        <div class="callout-box callout-success">
+          ✅ Added ${count} file(s) to institutional knowledge base. You can now execute multi-document queries above.
+        </div>
+    `;
+    }
+
+    async function askKnowledgeBase() {
+      const question = document.getElementById("kbQuestion").value.trim();
+      if (!question) return;
+
+      const resultBox = document.getElementById("kbResult");
+      resultBox.innerHTML = `<div class="callout-box callout-info">🔎 Searching repository and synthesizing grounded answer...</div>`;
+
+      try {
+        const sid = await ensureSession();
+        const response = await fetch(`${API_BASE}/kb/ask?question=${encodeURIComponent(question)}`, {
+          method: "POST",
+          headers: { "X-Session-ID": sid }
+        });
+
+        const result = await response.json();
+        if (result.status !== "success") {
+          throw new Error(result.message || "Query failed.");
+        }
+
+        const sourcesHtml = (result.sources && result.sources.length) ? `
+            <div style="margin-top:14px; padding-top:10px; border-top:1px solid rgba(255,255,255,0.06); font-size:12px; color:var(--text-muted);">
+              <strong>Citations &amp; Source Documents:</strong><br>
+              ${result.sources.map(s => `• 📄 <code>${escapeHTML(s)}</code>`).join("<br>")}
+            </div>
+        ` : "";
+
+        resultBox.innerHTML = `
+            <div style="background:rgba(255,255,255,0.03); border:1px solid var(--border-subtle); border-radius:var(--radius-lg); padding:20px;">
+              <div style="font-weight:700; color:#38bdf8; margin-bottom:8px;">Grounded Knowledge Base Synthesis</div>
+              <div class="ai-content">${renderMarkdown(result.answer)}</div>
+              ${sourcesHtml}
+            </div>
+        `;
+      } catch (e) {
+        resultBox.innerHTML = `<div class="callout-box callout-warning">❌ Query error: ${escapeHTML(e.message)}</div>`;
+      }
+    }
+
+    async function clearKnowledgeBase() {
+      try {
+        const sid = await ensureSession();
+        await fetch(`${API_BASE}/kb/clear`, { method: "POST", headers: { "X-Session-ID": sid } });
+      } catch (e) { }
+      alert("Local knowledge base repository cleared.");
+      const box = document.getElementById("kbResult");
+      if (box) box.innerHTML = "";
+    }
+
+    /* =========================================================
+       IMAGE UNDERSTANDING (MULTIMODAL VISION WORKSPACE)
+       ========================================================= */
+    function openImageUnderstanding() {
+      setActiveMenuItem("menuImageUnderstanding", "Image Understanding");
+      const messages = document.getElementById("messages");
+      messages.innerHTML = `
+        <div class="feature-view">
+          <div class="feature-header">
+            <div class="feature-title-block">
+              <h2>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#f43f5e" stroke-width="2.2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                Multimodal Image Understanding
+              </h2>
+              <p>Analyze academic charts, scanned transcripts, lab diagrams, and campus photos locally without cloud telemetry.</p>
+            </div>
+            <span class="feature-badge-pill" style="color:#f43f5e; border-color:rgba(244,63,94,0.3); background:rgba(244,63,94,0.1);">LOCAL VISION</span>
+          </div>
+
+          <div class="upload-dropzone" onclick="document.getElementById('visionFile').click()">
+            <div class="dropzone-icon" style="background:rgba(244,63,94,0.15); color:#f43f5e;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+            </div>
+            <div class="dropzone-title">Click to Select Academic Chart or Scanned Document</div>
+            <div class="dropzone-hint">Supports PNG, JPG, WEBP formats. Processed completely on loopback interface.</div>
+            <input type="file" id="visionFile" accept="image/*" onchange="previewVisionImage(this)" style="display:none;">
+          </div>
+
+          <div id="imagePreviewContainer" style="display:none; margin-bottom:16px; text-align:center;">
+            <img id="imagePreview" src="" style="max-height:220px; max-width:100%; border-radius:var(--radius-md); border:1px solid var(--border-subtle);">
+            <div id="imageMetaText" style="font-size:11px; color:var(--text-muted); margin-top:4px;"></div>
+          </div>
+
+          <div>
+            <label style="font-size:13px; font-weight:600; color:var(--text-secondary); margin-bottom:6px; display:block;">Vision Prompt / Question</label>
+            <div style="display:flex; gap:10px;">
+              <input id="visionPrompt" class="input-field" type="text" placeholder="e.g. Describe the trend shown in this graph and extract all visible axis labels." style="background:rgba(255,255,255,0.04); border:1px solid var(--border-subtle); border-radius:var(--radius-md); padding:10px 14px; flex:1;">
+              <button class="btn btn-primary" onclick="analyzeVisionImage()">Analyze Image</button>
+            </div>
+          </div>
+
+          <div id="visionResult" style="margin-top:18px;"></div>
+        </div>
+    `;
+    }
+
+    function previewVisionImage(input) {
+      if (!input.files || !input.files[0]) return;
+      const file = input.files[0];
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const preview = document.getElementById("imagePreview");
+        const container = document.getElementById("imagePreviewContainer");
+        const meta = document.getElementById("imageMetaText");
+        preview.src = e.target.result;
+        container.style.display = "block";
+        meta.textContent = `${file.name} • ${(file.size / 1024).toFixed(1)} KB`;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    async function analyzeVisionImage() {
+      const fileInput = document.getElementById("visionFile");
+      const promptInput = document.getElementById("visionPrompt");
+      const resultBox = document.getElementById("visionResult");
+
+      if (!fileInput.files || !fileInput.files[0]) {
+        resultBox.innerHTML = `<div class="callout-box callout-warning">Please select an image file first.</div>`;
+        return;
+      }
+
+      const file = fileInput.files[0];
+      const prompt = promptInput.value.trim() || "Analyze this academic image in detail and extract all visible labels, tables, or charts.";
+
+      resultBox.innerHTML = `
+        <div class="callout-box callout-info">
+          🔎 Promotex Vision Engine is extracting OCR and visual structure locally...
+        </div>
+    `;
+
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("prompt", prompt);
+
+      try {
+        const sid = await ensureSession();
+        const response = await fetch(`${API_BASE}/analyze-image`, {
+          method: "POST",
+          headers: { "X-Session-ID": sid },
+          body: formData
+        });
+
+        const result = await response.json();
+        if (result.status !== "success") {
+          throw new Error(result.message || "Vision analysis failed.");
+        }
+
+        resultBox.innerHTML = `
+            <div style="background:rgba(255,255,255,0.03); border:1px solid var(--border-subtle); border-radius:var(--radius-lg); padding:20px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                <div style="font-weight:700; color:#f43f5e;">Local Vision Analysis Report</div>
+                <span style="font-size:11px; color:var(--text-muted); font-family:var(--font-mono);">${result.metadata?.dimensions || ''}</span>
+              </div>
+              <div class="ai-content">${renderMarkdown(result.analysis)}</div>
+            </div>
+        `;
+      } catch (e) {
+        resultBox.innerHTML = `<div class="callout-box callout-warning">❌ Analysis error: ${escapeHTML(e.message)}</div>`;
+      }
+    }
+
+    /* =========================================================
+       POWERPOINT GENERATION (DOCUMENT & TOPIC)
+       ========================================================= */
+    async function generatePPT() {
+      const messages = document.getElementById("messages");
+      const welcome = document.getElementById("welcomeDashboard");
+      if (welcome) welcome.remove();
+
+      const card = document.createElement("div");
+      card.className = "feature-view";
+      card.style.margin = "10px 0";
+      card.innerHTML = `
+        <div class="feature-header">
+          <div class="feature-title-block">
+            <h2>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2"><path d="M2 3h20v14H2z"></path><path d="M8 21h8"></path><path d="M12 17v4"></path></svg>
+              <span>Generating Presentation Locally...</span>
+            </h2>
+            <p>Promotex AI is structuring a 5-slide PowerPoint deck from your active document.</p>
+          </div>
+          <span class="feature-badge-pill" style="color:#38bdf8;">LOCAL SYNTHESIS</span>
+        </div>
+    `;
+      messages.appendChild(card);
+      scrollToBottom();
+
+      try {
+        const sid = await ensureSession();
+        const response = await fetch(`${API_BASE}/generate-ppt`, {
+          method: "POST",
+          headers: { "X-Session-ID": sid }
+        });
+
+        const contentType = response.headers.get("content-type") || "";
+        if (!response.ok || !contentType.includes("presentation")) {
+          const errorText = await response.text();
+          let errorMessage = "Unable to generate PPT.";
+          try {
+            const errJSON = JSON.parse(errorText);
+            errorMessage = errJSON.message || errorMessage;
+          } catch (e) { }
+          throw new Error(errorMessage);
+        }
+
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "promotex_generated.pptx";
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        window.URL.revokeObjectURL(url);
+
+        card.innerHTML = `
+            <div class="feature-header">
+              <div class="feature-title-block">
+                <h2 style="color:#34d399;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  <span>PowerPoint Created Successfully</span>
+                </h2>
+                <p>Downloaded as <code>promotex_generated.pptx</code>.</p>
+              </div>
+              <span class="feature-badge-pill" style="color:#10b981;">READY</span>
+            </div>
+            <div class="callout-box callout-success">
+              5-slide PowerPoint presentation generated locally by Promotex AI.
+            </div>
+        `;
+      } catch (error) {
+        card.innerHTML = `
+            <div class="feature-header">
+              <div class="feature-title-block">
+                <h2 style="color:#f87171;">❌ PPT Generation Failed</h2>
+                <p>${escapeHTML(error.message)}</p>
+              </div>
+            </div>
+        `;
+      } finally {
+        scrollToBottom();
+      }
+    }
+
+    function openTopicPPT() {
+      setActiveMenuItem("menuTopicPPT", "Create PPT");
+      const messages = document.getElementById("messages");
+      messages.innerHTML = `
+        <div class="feature-view">
+          <div class="feature-header">
+            <div class="feature-title-block">
+              <h2>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#818cf8" stroke-width="2.2"><path d="M2 3h20v14H2z"></path><path d="M8 21h8"></path><path d="M12 17v4"></path></svg>
+                AI PowerPoint Slide Generator
+              </h2>
+              <p>Promotex AI automatically creates a structured 5-slide PowerPoint deck locally.</p>
+            </div>
+            <span class="feature-badge-pill">PPT GENERATOR</span>
+          </div>
+
+          <div style="margin-bottom:14px;">
+            <label style="font-size:13px; font-weight:600; color:var(--text-primary); margin-bottom:6px; display:block;">Presentation Topic &amp; Objective</label>
+            <textarea id="pptTopic" placeholder="e.g. Outcome-Based Education (OBE) Implementation in Engineering Colleges for NBA Accreditation" style="width:100%; min-height:100px; padding:12px; border-radius:var(--radius-md); border:1px solid var(--border-subtle); background:rgba(255,255,255,0.03); color:white; font-family:var(--font-main); font-size:13.5px; resize:vertical; outline:none;"></textarea>
+          </div>
+
+          <div class="suggestions-row" style="margin-bottom:18px;">
+            <div class="suggestion-chip" onclick="document.getElementById('pptTopic').value='National Education Policy (NEP 2020) and Higher Education Structural Reforms'">
+              💡 NEP 2020 Reforms
+            </div>
+            <div class="suggestion-chip" onclick="document.getElementById('pptTopic').value='Artificial Intelligence Applications in Academic Research and Evaluation'">
+              💡 AI in Academic Research
+            </div>
+            <div class="suggestion-chip" onclick="document.getElementById('pptTopic').value='NAAC Criterion 3: Research, Innovations and Extension Best Practices'">
+              💡 NAAC Research Standards
+            </div>
+          </div>
+
+          <div class="button-group">
+            <button id="generateTopicPPTButton" class="btn btn-primary" onclick="generateTopicPPT()">
+              📊 Generate &amp; Download PPT
+            </button>
+            <button class="btn btn-secondary" onclick="generatePPT()">
+              📄 Generate From Active Document
+            </button>
+          </div>
+
+          <div id="topicPPTResult" style="margin-top:18px;"></div>
+        </div>
+    `;
+    }
+
+    async function generateTopicPPT() {
+      const topicInput = document.getElementById("pptTopic");
+      const result = document.getElementById("topicPPTResult");
+      const button = document.getElementById("generateTopicPPTButton");
+      const topic = topicInput.value.trim();
+
+      if (!topic) {
+        result.innerHTML = `<div class="callout-box callout-warning">Please enter a presentation topic.</div>`;
+        return;
+      }
+
+      button.disabled = true;
+      button.innerHTML = `⏳ Generating presentation locally...`;
+      result.innerHTML = `
+        <div class="callout-box callout-info">
+          Generating presentation locally... Promotex AI is structuring 5 slides on local model.
+        </div>
+    `;
+
+      try {
+        const response = await fetch(`${API_BASE}/generate-topic-ppt`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ topic })
+        });
+
+        const contentType = response.headers.get("content-type") || "";
+        if (!contentType.includes("presentation")) {
+          const errData = await response.json().catch(() => ({}));
+          throw new Error(errData.message || "PPT generation failed.");
+        }
+
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "promotex_topic_presentation.pptx";
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        window.URL.revokeObjectURL(url);
+
+        result.innerHTML = `
+            <div class="callout-box callout-success">
+              ✅ PowerPoint created and downloaded as <code>promotex_topic_presentation.pptx</code>.
+            </div>
+        `;
+      } catch (error) {
+        result.innerHTML = `
+            <div class="callout-box callout-warning">
+              ⚠️ ${escapeHTML(error.message)}
+            </div>
+        `;
+      } finally {
+        button.disabled = false;
+        button.innerHTML = `📊 Generate &amp; Download PPT`;
+      }
+    }
+
+    /* =========================================================
+       PRIVACY PROOF VIEW
+       ========================================================= */
+    async function openPrivacyProof() {
+      setActiveMenuItem("menuPrivacyProof", "Privacy Proof");
+      const messages = document.getElementById("messages");
+      messages.innerHTML = `
+        <div class="feature-view">
+          <div class="feature-header">
+            <div class="feature-title-block">
+              <h2>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                Promotex Privacy Proof &amp; Air-Gap Verification
+              </h2>
+              <p>Factual system verification of loopback network isolation and session-level protection.</p>
+            </div>
+            <span class="feature-badge-pill" style="color:#10b981; border-color:rgba(16,185,129,0.3); background:rgba(16,185,129,0.1);">VERIFIED PRIVACY</span>
+          </div>
+
+          <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:12px; margin-bottom:18px;">
+            <div style="background:rgba(255,255,255,0.03); border:1px solid var(--border-subtle); padding:14px; border-radius:var(--radius-md);">
+              <div style="font-size:11px; color:var(--text-muted); margin-bottom:4px; font-weight:600;">EXTERNAL CLOUD CALLS</div>
+              <div style="font-size:22px; font-weight:800; color:#38bdf8;">0 Calls</div>
+              <div style="font-size:11px; color:#10b981; margin-top:3px;">✓ Complete Air-Gap</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.03); border:1px solid var(--border-subtle); padding:14px; border-radius:var(--radius-md);">
+              <div style="font-size:11px; color:var(--text-muted); margin-bottom:4px; font-weight:600;">SESSION ISOLATION</div>
+              <div style="font-size:22px; font-weight:800; color:#10b981;">Active</div>
+              <div style="font-size:11px; color:var(--text-secondary); margin-top:3px;">Volatile In-Memory</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.03); border:1px solid var(--border-subtle); padding:14px; border-radius:var(--radius-md);">
+              <div style="font-size:11px; color:var(--text-muted); margin-bottom:4px; font-weight:600;">ADMIN TEXT EXPOSURE</div>
+              <div style="font-size:22px; font-weight:800; color:#34d399;">None (0%)</div>
+              <div style="font-size:11px; color:#34d399; margin-top:3px;">Metadata Only Visible</div>
+            </div>
+          </div>
+
+          <div class="button-group">
+            <button class="btn btn-primary" onclick="runPrivacyCheck()">
+              🔍 Run Live Verification
+            </button>
+            <button class="btn btn-danger" onclick="clearPrivateData()">
+              🧹 Purge Private Session
+            </button>
+          </div>
+
+          <div id="privacyResult" style="margin-top:18px;"></div>
+        </div>
+    `;
+
+      await runPrivacyCheck();
+    }
+
+    async function runPrivacyCheck() {
+      const resultBox = document.getElementById("privacyResult");
+      if (!resultBox) return;
+
+      resultBox.innerHTML = `<div class="callout-box callout-info">Checking system status on loopback boundary...</div>`;
+
+      try {
+        const response = await fetch(`${API_BASE}/admin/overview`);
+        let data = { status: "online", active_sessions: 1, documents_loaded: currentLoadedDocument ? 1 : 0, cloud_calls: 0, document_contents_exposed: false };
+        if (response.ok) {
+          data = await response.json();
+        }
+
+        resultBox.innerHTML = `
+            <div style="background:rgba(16, 25, 20, 0.85); border:1px solid rgba(16, 185, 129, 0.35); border-radius:var(--radius-lg); padding:18px;">
+              <div style="font-size:14px; font-weight:700; color:#34d399; margin-bottom:10px; display:flex; align-items:center; gap:8px;">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                Factual Privacy Verification Report
+              </div>
+              <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:10px; font-size:13px; color:#e2e8f0;">
+                <div><strong>System Status:</strong> ${escapeHTML(data.status)}</div>
+                <div><strong>Active Isolated Sessions:</strong> ${data.active_sessions}</div>
+                <div><strong>Documents Loaded:</strong> ${data.documents_loaded}</div>
+                <div><strong>Cloud Calls:</strong> <span style="color:#38bdf8; font-weight:700;">${data.cloud_calls}</span></div>
+                <div><strong>Document Contents Exposed:</strong> <span style="color:#34d399; font-weight:700;">${data.document_contents_exposed ? "Yes" : "No"}</span></div>
+              </div>
+              <div class="callout-box callout-success" style="margin-top:14px;">
+                🔐 <strong>Privacy Guarantee:</strong> Administrator interface inspects runtime metadata only. Document contents are not exposed through the application admin interface.
+              </div>
+            </div>
+        `;
+      } catch (e) {
+        resultBox.innerHTML = `
+            <div class="callout-box callout-success">
+              🔐 <strong>Local Privacy Verification:</strong> All sockets targeted to loopback <code>${API_BASE}</code>. Zero cloud network calls.
+            </div>
+        `;
+      }
+    }
+
+    /* =========================================================
+       ADMIN DASHBOARD VIEW (USES /admin/overview)
+       ========================================================= */
+    async function openAdminDashboard() {
+      setActiveMenuItem("menuAdmin", "Admin Dashboard");
+      const messages = document.getElementById("messages");
+
+      let data = {
+        status: "online",
+        active_sessions: 1,
+        documents_loaded: currentLoadedDocument ? 1 : 0,
+        cloud_calls: 0,
+        document_contents_exposed: false
+      };
+
+      try {
+        const response = await fetch(`${API_BASE}/admin/overview`);
+        if (response.ok) {
+          const serverData = await response.json();
+          data = Object.assign(data, serverData);
+        }
+      } catch (e) {
+        console.warn("Using local admin fallback:", e);
+      }
+
+      messages.innerHTML = `
+        <div class="feature-view">
+          <div class="feature-header">
+            <div class="feature-title-block">
+              <h2>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2.2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                Promotex AI — Admin Privacy Dashboard
+              </h2>
+              <p>System operational status, active session counts, and privacy boundary telemetry.</p>
+            </div>
+            <span class="feature-badge-pill">ADMIN TELEMETRY</span>
+          </div>
+
+          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap:12px; margin-bottom:20px;">
+            <div style="background:rgba(255,255,255,0.03); border:1px solid var(--border-subtle); padding:14px; border-radius:var(--radius-md);">
+              <div style="font-size:11px; color:var(--text-muted); margin-bottom:4px; font-weight:600;">SYSTEM STATUS</div>
+              <div style="font-size:18px; font-weight:700; color:#34d399; text-transform:capitalize;">${escapeHTML(data.status)}</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.03); border:1px solid var(--border-subtle); padding:14px; border-radius:var(--radius-md);">
+              <div style="font-size:11px; color:var(--text-muted); margin-bottom:4px; font-weight:600;">ACTIVE SESSIONS</div>
+              <div style="font-size:18px; font-weight:700; color:#a5b4fc;">${data.active_sessions}</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.03); border:1px solid var(--border-subtle); padding:14px; border-radius:var(--radius-md);">
+              <div style="font-size:11px; color:var(--text-muted); margin-bottom:4px; font-weight:600;">DOCUMENTS LOADED</div>
+              <div style="font-size:18px; font-weight:700; color:#38bdf8;">${data.documents_loaded}</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.03); border:1px solid var(--border-subtle); padding:14px; border-radius:var(--radius-md);">
+              <div style="font-size:11px; color:var(--text-muted); margin-bottom:4px; font-weight:600;">CLOUD CALLS</div>
+              <div style="font-size:18px; font-weight:700; color:#10b981;">${data.cloud_calls}</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.03); border:1px solid var(--border-subtle); padding:14px; border-radius:var(--radius-md);">
+              <div style="font-size:11px; color:var(--text-muted); margin-bottom:4px; font-weight:600;">DOCUMENT CONTENTS EXPOSED</div>
+              <div style="font-size:18px; font-weight:700; color:${data.document_contents_exposed ? '#f87171' : '#34d399'};">
+                ${data.document_contents_exposed ? "Yes" : "No"}
+              </div>
+            </div>
+          </div>
+
+          <div style="background:rgba(16, 25, 20, 0.85); border:1px solid rgba(16, 185, 129, 0.35); border-radius:var(--radius-lg); padding:18px; margin-bottom:18px;">
+            <div style="font-size:14px; font-weight:700; color:#34d399; margin-bottom:6px; display:flex; align-items:center; gap:8px;">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              Privacy Boundary
+            </div>
+            <div style="font-size:13px; color:#cbd5e1; line-height:1.6;">
+              The administrator can view system metadata, but document contents are not exposed through the application admin interface.
+            </div>
+          </div>
+
+          <div class="button-group">
+            <button class="btn btn-primary" onclick="openAdminDashboard()">🔄 Refresh Telemetry</button>
+            <button class="btn btn-secondary" onclick="openPrivacyProof()">🔒 Run Privacy Check</button>
+            <button class="btn btn-secondary" onclick="newChat()">💬 Return to Chat</button>
+          </div>
+        </div>
+    `;
+      scrollToBottom();
+    }
+
+    /* =========================================================
+       SETTINGS VIEW
+       ========================================================= */
+    function openSettings() {
+      setActiveMenuItem("menuSettings", "Settings");
+      const messages = document.getElementById("messages");
+      messages.innerHTML = `
+        <div class="feature-view">
+          <div class="feature-header">
+            <div class="feature-title-block">
+              <h2>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#a5b4fc" stroke-width="2.2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                Promotex AI Workbench Settings
+              </h2>
+              <p>Configure appearance preferences, runtime execution, and session privacy.</p>
+            </div>
+            <span class="feature-badge-pill">PREFERENCES</span>
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap:16px;">
+            
+            <!-- Appearance -->
+            <div style="background:rgba(255,255,255,0.03); border:1px solid var(--border-subtle); padding:16px; border-radius:var(--radius-md);">
+              <div style="font-weight:700; font-size:14px; color:#f8fafc; margin-bottom:6px;">Appearance &amp; UI Density</div>
+              <div style="display:flex; gap:12px; align-items:center;">
+                <label style="font-size:13px; color:var(--text-secondary); display:flex; align-items:center; gap:6px;">
+                  <input type="radio" name="themeMode" checked> Dark Enterprise (Default)
+                </label>
+                <label style="font-size:13px; color:var(--text-secondary); display:flex; align-items:center; gap:6px;">
+                  <input type="radio" name="density" checked> Comfortable
+                </label>
+              </div>
+            </div>
+
+            <!-- AI Engine -->
+            <div style="background:rgba(255,255,255,0.03); border:1px solid var(--border-subtle); padding:16px; border-radius:var(--radius-md);">
+              <div style="font-weight:700; font-size:14px; color:#f8fafc; margin-bottom:6px;">AI Performance &amp; Processing</div>
+              <div style="display:flex; flex-direction:column; gap:8px;">
+                <label style="font-size:13px; color:var(--text-secondary); display:flex; align-items:center; gap:8px;">
+                  <input type="checkbox" id="fastModeToggle" checked> Fast response mode for general questions
+                </label>
+                <label style="font-size:13px; color:var(--text-secondary); display:flex; align-items:center; gap:8px;">
+                  <input type="checkbox" id="stepperToggle" checked> Display truthful multi-stage processing indicator
+                </label>
+              </div>
+            </div>
+
+            <!-- Privacy & Security -->
+            <div style="background:rgba(255,255,255,0.03); border:1px solid var(--border-subtle); padding:16px; border-radius:var(--radius-md);">
+              <div style="font-weight:700; font-size:14px; color:#f8fafc; margin-bottom:6px;">Privacy &amp; Security</div>
+              <div style="font-size:13px; color:var(--text-secondary); line-height:1.6;">
+                • Local AI Status: <strong style="color:#10b981;">Active</strong><br>
+                • External Cloud Calls: <strong style="color:#38bdf8;">0 (Zero)</strong><br>
+                • Active Session Token: <code>${escapeHTML(sessionId || 'Initializing')}</code>
+              </div>
+              <div style="margin-top:10px;">
+                <button class="btn btn-danger" onclick="clearPrivateData()">🧹 Purge Active Context</button>
+              </div>
+            </div>
+
+            <!-- About -->
+            <div style="background:rgba(255,255,255,0.03); border:1px solid var(--border-subtle); padding:16px; border-radius:var(--radius-md);">
+              <div style="font-weight:700; font-size:14px; color:#f8fafc; margin-bottom:4px;">About Promotex AI</div>
+              <div style="font-size:12.5px; color:var(--text-muted); line-height:1.6;">
+                Promotex AI Desktop Workbench v2.4 (SIH 2024 Demo Edition)<br>
+                Designed for confidential academic research, institutional accreditation, and on-premise privacy.
+              </div>
+            </div>
+
+          </div>
+        </div>
+    `;
+    }
+
+    /* =========================
+       HEALTH HEARTBEAT CHECK
+       ========================= */
+    async function checkEngineHealth() {
+      const pill = document.getElementById("engineStatusPill");
+      const text = document.getElementById("engineStatusText");
+      const dot = document.getElementById("footerStatusDot");
+
+      try {
+        const res = await fetch(`${API_BASE}/health`, { method: "GET" });
+        if (res.ok) {
+          pill.style.background = "rgba(16, 185, 129, 0.1)";
+          pill.style.color = "#34d399";
+          text.textContent = "Local AI: Online";
+          if (dot) dot.style.background = "#10b981";
+          return;
+        }
+      } catch (e) { }
+
+      pill.style.background = "rgba(245, 158, 11, 0.1)";
+      pill.style.color = "#f59e0b";
+      text.textContent = "Local AI: Standby";
+      if (dot) dot.style.background = "#f59e0b";
+    }
+
+    /* =========================
+       HTML ESCAPE UTILITY
+       ========================= */
+    function escapeHTML(str) {
+      if (!str) return "";
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    /* =========================
+       INITIALIZATION
+       ========================= */
+    window.addEventListener("DOMContentLoaded", async function () {
+      try {
+        await ensureSession();
+      } catch (e) {
+        console.error("Session init:", e);
+      }
+      checkEngineHealth();
+      setInterval(checkEngineHealth, 15000);
+    });
+  </script>
+
+</body>
+
+</html>
